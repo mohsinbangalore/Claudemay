@@ -4,176 +4,75 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sara · Dubai</title>
-  <!-- PWA -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#111111">
-  <!-- iOS standalone mode -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Sara">
   <link rel="apple-touch-icon" href="icon.svg">
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,400;1,600;1,700;1,800;1,900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,400;1,700;1,900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ── FLUID SCALE TOKENS ─────────────────── */
     :root {
-      --gap:        clamp(6px,  1.8vw, 16px);
-      --card-px:    clamp(10px, 2.8vw, 22px);
-      --card-py:    clamp(10px, 2.8vw, 22px);
-      --radius:     clamp(14px, 3.5vw, 26px);
-      --app-px:     clamp(12px, 4vw,   40px);
-      --app-pt:     clamp(22px, 5vw,   52px);
-
-      /* fluid font sizes */
-      --f-giant:  clamp(30px, 9.5vw, 58px);   /* Aster "2m" */
-      --f-aed:    clamp(24px, 7.5vw, 46px);   /* AED 48 */
-      --f-xl:     clamp(17px, 5.2vw, 34px);   /* main titles */
-      --f-lg:     clamp(14px, 4.2vw, 28px);   /* mid titles */
-      --f-md:     clamp(12px, 3.5vw, 22px);   /* smaller titles */
-      --f-base:   clamp(10px, 2.8vw, 15px);   /* body */
-      --f-sm:     clamp(9px,  2.4vw, 13px);   /* sub */
-      --f-xs:     clamp(7.5px,1.9vw, 11px);   /* tags/labels */
-
-      /* component sizes */
-      --btn-sz:   clamp(22px, 5.5vw, 34px);
-      --av-sz:    clamp(36px, 8vw,   50px);
-      --dot-sz:   clamp(6px,  1.5vw, 9px);
+      --gap:     clamp(6px,  1.8vw, 16px);
+      --cpx:     clamp(10px, 2.8vw, 22px);
+      --cpy:     clamp(10px, 2.8vw, 22px);
+      --r:       clamp(14px, 3.5vw, 26px);
+      --apx:     clamp(12px, 4vw,   40px);
+      --apt:     clamp(22px, 5vw,   52px);
+      --f-giant: clamp(30px, 9.5vw, 58px);
+      --f-aed:   clamp(24px, 7.5vw, 46px);
+      --f-xl:    clamp(17px, 5.2vw, 34px);
+      --f-lg:    clamp(14px, 4.2vw, 28px);
+      --f-md:    clamp(12px, 3.5vw, 22px);
+      --f-base:  clamp(10px, 2.8vw, 15px);
+      --f-sm:    clamp(9px,  2.4vw, 13px);
+      --f-xs:    clamp(7.5px,1.9vw, 11px);
+      --bsz:     clamp(22px, 5.5vw, 34px);
+      --asz:     clamp(36px, 8vw,   50px);
+      --dsz:     clamp(6px,  1.5vw, 9px);
     }
 
-    body {
-      background: #111;
-      color: #f0ede6;
-      font-family: 'Inter', -apple-system, sans-serif;
-      min-height: 100vh;
-    }
+    body { background:#111; color:#f0ede6; font-family:'Inter',-apple-system,sans-serif; min-height:100vh; overflow-x:hidden; }
 
-    /* ── APP CONTAINER ──────────────────────── */
-    .app {
-      width: 100%;
-      padding: var(--app-pt) var(--app-px) clamp(40px,8vw,80px);
-    }
+    /* ── HOME ── */
+    #home { min-height:100vh; }
+    .app { width:100%; padding:var(--apt) var(--apx) clamp(40px,8vw,80px); }
+    @media(min-width:560px)  { .app { max-width:600px;  margin:0 auto; } }
+    @media(min-width:768px)  { .app { max-width:860px;  } }
+    @media(min-width:1024px) { .app { max-width:1060px; } }
 
-    /* Center + cap width on larger screens */
-    @media (min-width: 560px)  { .app { max-width: 600px;  margin: 0 auto; } }
-    @media (min-width: 768px)  { .app { max-width: 860px;  } }
-    @media (min-width: 1024px) { .app { max-width: 1060px; } }
+    .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:clamp(18px,4vw,28px); }
+    .loc { display:flex; align-items:center; gap:clamp(5px,1.5vw,9px); font-size:var(--f-xs); font-weight:500; letter-spacing:.1em; color:#888; text-transform:uppercase; }
+    .loc-dot { width:var(--dsz); height:var(--dsz); border-radius:50%; background:#4caf50; box-shadow:0 0 0 2px rgba(76,175,80,.25); flex-shrink:0; }
+    .avatar { width:var(--asz); height:var(--asz); border-radius:50%; background:#c9a227; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:clamp(15px,4vw,20px); color:#fff; flex-shrink:0; }
 
-    /* ── HEADER ─────────────────────────────── */
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: clamp(18px, 4vw, 28px);
-    }
+    .greeting { font-family:'Playfair Display',Georgia,serif; font-size:clamp(28px,8vw,54px); font-weight:700; line-height:1.15; margin-bottom:clamp(18px,4vw,30px); color:#f0ede6; }
+    .greeting .name { font-style:italic; color:#c9a227; }
 
-    .loc {
-      display: flex;
-      align-items: center;
-      gap: clamp(5px, 1.5vw, 9px);
-      font-size: var(--f-xs);
-      font-weight: 500;
-      letter-spacing: .1em;
-      color: #888;
-      text-transform: uppercase;
-    }
+    .search { background:#1e1e1e; border:1px solid #2a2a2a; border-radius:50px; padding:clamp(11px,2.8vw,16px) clamp(14px,3.5vw,22px); display:flex; align-items:center; gap:clamp(8px,2vw,14px); margin-bottom:clamp(14px,3.5vw,22px); }
+    .search svg { color:#666; flex-shrink:0; width:clamp(14px,3.5vw,18px); height:clamp(14px,3.5vw,18px); }
+    .search input { flex:1; background:none; border:none; outline:none; color:#999; font-size:clamp(12px,3vw,16px); font-family:'Inter',sans-serif; }
+    .search input::placeholder { color:#555; }
 
-    .loc-dot {
-      width: var(--dot-sz); height: var(--dot-sz);
-      border-radius: 50%;
-      background: #4caf50;
-      box-shadow: 0 0 0 2px rgba(76,175,80,.25);
-      flex-shrink: 0;
-    }
+    .grid { display:flex; gap:var(--gap); align-items:flex-start; }
+    .col  { flex:1; display:flex; flex-direction:column; gap:var(--gap); min-width:0; }
 
-    .avatar {
-      width: var(--av-sz); height: var(--av-sz);
-      border-radius: 50%;
-      background: #c9a227;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700;
-      font-size: clamp(15px, 4vw, 20px);
-      color: #fff;
-      flex-shrink: 0;
-    }
+    .card { border-radius:var(--r); padding:var(--cpy) var(--cpx); position:relative; overflow:hidden; cursor:pointer; transition:transform .15s ease; }
+    .card:hover  { transform:scale(.97); }
+    .card:active { transform:scale(.95); }
 
-    /* ── GREETING ────────────────────────────── */
-    .greeting {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(28px, 8vw, 54px);
-      font-weight: 700;
-      line-height: 1.15;
-      margin-bottom: clamp(18px, 4vw, 30px);
-      color: #f0ede6;
-    }
+    .navy   { background:#1b2d52; }
+    .coral  { background:#bf4e3a; }
+    .gold   { background:#c9a227; }
+    .cream  { background:#e8dfcc; color:#1a1a1a; }
+    .dark   { background:#1c1c1c; }
+    .wine   { background:#3c1020; }
+    .forest { background:#2b4530; }
 
-    .greeting .name { font-style: italic; color: #c9a227; }
-
-    /* ── SEARCH ─────────────────────────────── */
-    .search {
-      background: #1e1e1e;
-      border: 1px solid #2a2a2a;
-      border-radius: 50px;
-      padding: clamp(11px, 2.8vw, 16px) clamp(14px, 3.5vw, 22px);
-      display: flex;
-      align-items: center;
-      gap: clamp(8px, 2vw, 14px);
-      margin-bottom: clamp(14px, 3.5vw, 22px);
-    }
-
-    .search svg { color: #666; flex-shrink: 0; width: clamp(14px,3.5vw,18px); height: clamp(14px,3.5vw,18px); }
-
-    .search input {
-      flex: 1;
-      background: none; border: none; outline: none;
-      color: #999;
-      font-size: clamp(12px, 3vw, 16px);
-      font-family: 'Inter', sans-serif;
-    }
-
-    .search input::placeholder { color: #555; }
-
-    /* ── GRID ───────────────────────────────── */
-    .grid {
-      display: flex;
-      gap: var(--gap);
-      align-items: flex-start;
-    }
-
-    .col {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: var(--gap);
-      min-width: 0;
-    }
-
-    /* ── CARDS ──────────────────────────────── */
-    .card {
-      border-radius: var(--radius);
-      padding: var(--card-py) var(--card-px);
-      position: relative;
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform .15s ease;
-    }
-
-    .card:hover  { transform: scale(.97); }
-    .card:active { transform: scale(.95); }
-
-    /* Color variants */
-    .navy   { background: #1b2d52; }
-    .coral  { background: #bf4e3a; }
-    .gold   { background: #c9a227; }
-    .cream  { background: #e8dfcc; color: #1a1a1a; }
-    .dark   { background: #1c1c1c; }
-    .wine   { background: #3c1020; }
-    .forest { background: #2b4530; }
-
-    /* ── FLUID FONT CLASSES ─────────────────── */
     .f-giant { font-family:'Inter',sans-serif; font-weight:800; font-size:var(--f-giant); line-height:1; letter-spacing:-.02em; }
     .f-aed   { font-family:'Inter',sans-serif; font-weight:800; font-size:var(--f-aed);   line-height:1; letter-spacing:-.02em; }
     .f-xl    { font-family:'Playfair Display',serif; font-style:italic; font-weight:800; font-size:var(--f-xl); line-height:1.05; }
@@ -185,318 +84,166 @@
     .f-sm    { font-size:var(--f-sm); }
     .f-xs    { font-size:var(--f-xs); }
 
-    /* ── UTILITY ELEMENTS ───────────────────── */
-    .tag {
-      font-size: var(--f-xs);
-      font-weight: 600;
-      letter-spacing: .13em;
-      text-transform: uppercase;
-      opacity: .65;
-      margin-bottom: clamp(3px,1vw,6px);
+    .tag { font-size:var(--f-xs); font-weight:600; letter-spacing:.13em; text-transform:uppercase; opacity:.65; margin-bottom:clamp(3px,1vw,6px); }
+    .tag.dt { color:#1a1a1a; }
+    .row { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:clamp(3px,1vw,5px); }
+    .dot { width:var(--dsz); height:var(--dsz); border-radius:50%; flex-shrink:0; margin-top:2px; }
+    .dot-red  { background:#e05040; }
+    .dot-gold { background:#c9a227; }
+    .cbtn { width:var(--bsz); height:var(--bsz); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:clamp(10px,2.5vw,14px); flex-shrink:0; }
+    .cb-dark  { background:#111; color:#fff; }
+    .cb-gold  { background:#c9a227; color:#111; font-weight:700; }
+    .cb-light { background:rgba(255,255,255,.18); color:#fff; }
+    .cb-black { background:rgba(0,0,0,.25); color:rgba(255,255,255,.8); }
+    .sub  { font-size:var(--f-xs); opacity:.6; margin-top:clamp(2px,.8vw,4px); }
+    .meta { font-size:var(--f-xs); font-weight:500; letter-spacing:.1em; text-transform:uppercase; opacity:.45; margin-top:clamp(4px,1.2vw,8px); }
+
+    .pill-btn { display:inline-flex; align-items:center; gap:clamp(4px,1.2vw,7px); background:#c9a227; color:#111; border-radius:50px; padding:clamp(5px,1.5vw,9px) clamp(8px,2.2vw,14px); font-size:var(--f-xs); font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin-top:clamp(8px,2vw,14px); }
+    .pill-btn .bd { width:clamp(4px,1vw,6px); height:clamp(4px,1vw,6px); border-radius:50%; background:#111; }
+
+    .toggle-pill { display:flex; align-items:center; justify-content:space-between; background:rgba(0,0,0,.28); border-radius:50px; padding:clamp(6px,1.8vw,10px) clamp(8px,2vw,12px); margin-top:clamp(8px,2vw,12px); }
+    .toggle-pill span { font-size:var(--f-xs); font-weight:500; color:rgba(255,255,255,.9); }
+    .toggle { width:clamp(26px,6.5vw,38px); height:clamp(15px,3.8vw,22px); border-radius:50px; position:relative; flex-shrink:0; }
+    .toggle::after { content:''; position:absolute; right:2px; top:2px; width:clamp(11px,2.8vw,18px); height:clamp(11px,2.8vw,18px); border-radius:50%; background:#fff; }
+    .t-blue   { background:#007aff; }
+    .t-purple { background:#9b59b6; }
+
+    .data-row { display:flex; justify-content:space-between; font-size:var(--f-xs); margin-bottom:clamp(1px,.5vw,3px); }
+    .data-row .lbl { opacity:.6; }
+    .data-row .val { font-weight:600; }
+
+    .dot-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:clamp(3px,.8vw,5px); margin:clamp(6px,1.8vw,10px) 0; }
+    .dg { aspect-ratio:1; border-radius:50%; background:rgba(0,0,0,.18); }
+    .dg.hi { background:#c05040; }
+
+    .arch { width:clamp(38px,10vw,64px); height:clamp(44px,12vw,76px); border:clamp(3px,.8vw,6px) solid rgba(0,0,0,.2); border-radius:100px 100px 0 0; margin:clamp(6px,1.8vw,10px) auto clamp(2px,.6vw,4px); }
+    .wm { position:absolute; bottom:-14px; right:-4px; font-family:'Playfair Display',serif; font-weight:900; font-size:clamp(60px,18vw,110px); opacity:.07; line-height:1; pointer-events:none; }
+    .mini-av { width:clamp(26px,6.5vw,38px); height:clamp(26px,6.5vw,38px); border-radius:50%; background:#2e2e2e; display:flex; align-items:center; justify-content:center; font-weight:600; font-size:clamp(12px,3vw,17px); }
+    .dewa-oval { width:clamp(32px,8.5vw,52px); height:clamp(22px,5.5vw,34px); border-radius:50%; background:#c0392b; margin:clamp(5px,1.5vw,9px) 0 clamp(3px,1vw,5px); }
+    .express { display:inline-block; background:rgba(0,0,0,.3); border-radius:50px; padding:clamp(4px,1.2vw,7px) clamp(7px,1.8vw,12px); font-size:var(--f-xs); font-weight:600; margin-top:clamp(6px,1.8vw,11px); color:rgba(255,255,255,.85); }
+    .dial { width:clamp(34px,8.5vw,54px); height:clamp(34px,8.5vw,54px); border-radius:50%; background:radial-gradient(circle at 38% 32%,#4a4a4a,#1a1a1a); border:2px solid #333; margin:clamp(6px,1.8vw,10px) auto 0; }
+    .topup-btn { display:flex; align-items:center; justify-content:space-between; background:rgba(0,0,0,.2); border-radius:50px; padding:clamp(6px,1.8vw,10px) clamp(10px,2.5vw,16px); margin-top:clamp(8px,2vw,13px); font-size:var(--f-sm); font-weight:600; color:#1a1a1a; }
+    .damac-d { position:absolute; top:6px; left:10px; font-family:'Playfair Display',serif; font-weight:900; font-size:clamp(50px,14vw,90px); color:rgba(255,255,255,.1); line-height:1; pointer-events:none; }
+    .damac-i { position:absolute; bottom:clamp(36px,9vw,54px); left:clamp(14px,3.5vw,22px); font-family:'Playfair Display',serif; font-style:italic; font-weight:400; font-size:clamp(22px,6vw,38px); color:rgba(255,255,255,.06); pointer-events:none; }
+    @media(max-width:339px) { .grid{gap:5px;} .card{padding:9px 8px;} }
+
+    /* ══ SLIDE VIEWS ══════════════════════════ */
+    .sview {
+      position:fixed; inset:0; background:#111;
+      overflow-y:auto; -webkit-overflow-scrolling:touch;
+      transform:translateX(100%);
+      transition:transform .3s cubic-bezier(0.4,0,0.2,1);
+      will-change:transform;
     }
+    #biz  { z-index:50; }
+    #chat { z-index:100; display:flex; flex-direction:column; overflow:hidden; }
+    .sview.open { transform:translateX(0); }
 
-    .tag.dt { color: #1a1a1a; }
-
-    .row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: clamp(3px,1vw,5px);
+    /* ── NAV BAR ── */
+    .nbar {
+      position:sticky; top:0; z-index:10;
+      display:flex; align-items:center; gap:12px;
+      padding:12px clamp(14px,3.5vw,20px);
+      background:rgba(17,17,17,.93);
+      backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(255,255,255,.07);
     }
+    .back { display:flex; align-items:center; gap:4px; color:#c9a227; font-size:clamp(13px,3.2vw,15px); font-weight:600; cursor:pointer; flex-shrink:0; }
 
-    .dot {
-      width: var(--dot-sz); height: var(--dot-sz);
-      border-radius: 50%;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
+    /* ── BUSINESS PAGE ── */
+    .biz-hero { padding:clamp(28px,7vw,44px) clamp(16px,4vw,28px) clamp(24px,6vw,36px); position:relative; overflow:hidden; }
+    .biz-cat  { font-size:9.5px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; opacity:.55; margin-bottom:10px; }
+    .biz-name { font-family:'Playfair Display',serif; font-style:italic; font-weight:800; font-size:clamp(32px,8.5vw,54px); line-height:1.05; margin-bottom:8px; }
+    .biz-line { font-size:clamp(12px,3vw,14px); opacity:.6; line-height:1.5; }
+    .biz-deco { position:absolute; bottom:-22px; right:-8px; font-family:'Playfair Display',serif; font-weight:900; font-size:clamp(100px,28vw,160px); opacity:.08; line-height:1; pointer-events:none; }
 
-    .dot-red  { background: #e05040; }
-    .dot-gold { background: #c9a227; }
+    .opts-hd { padding:clamp(16px,4vw,22px) clamp(14px,3.5vw,20px) clamp(8px,2vw,12px); font-size:9.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; opacity:.38; }
+    .opts-grid { display:grid; grid-template-columns:1fr 1fr; gap:clamp(8px,2vw,12px); padding:0 clamp(14px,3.5vw,20px) clamp(40px,10vw,60px); }
+    .opt-card { background:#1a1a1a; border:1px solid rgba(255,255,255,.06); border-radius:clamp(16px,4vw,22px); padding:clamp(14px,3.5vw,22px) clamp(12px,3vw,18px); cursor:pointer; transition:transform .14s ease,background .14s; }
+    .opt-card:hover  { background:#1f1f1f; }
+    .opt-card:active { transform:scale(.95); }
+    .opt-icon  { font-size:clamp(22px,5.5vw,32px); margin-bottom:clamp(8px,2vw,12px); line-height:1; }
+    .opt-label { font-size:clamp(12px,3vw,15px); font-weight:700; margin-bottom:4px; color:#f0ede6; }
+    .opt-desc  { font-size:clamp(10px,2.5vw,12px); opacity:.45; line-height:1.45; color:#f0ede6; }
 
-    .cbtn {
-      width: var(--btn-sz); height: var(--btn-sz);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: clamp(10px,2.5vw,14px);
-      flex-shrink: 0;
-    }
+    /* ── CHAT PAGE ── */
+    .ag-av { width:clamp(34px,8.5vw,44px); height:clamp(34px,8.5vw,44px); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:clamp(11px,2.8vw,14px); font-weight:700; flex-shrink:0; }
+    .ag-name   { font-size:clamp(13px,3.5vw,16px); font-weight:700; }
+    .ag-status { font-size:clamp(10px,2.5vw,11px); color:#4caf50; margin-top:1px; }
 
-    .cb-dark  { background: #111; color: #fff; }
-    .cb-gold  { background: #c9a227; color: #111; font-weight: 700; }
-    .cb-light { background: rgba(255,255,255,.18); color: #fff; }
-    .cb-black { background: rgba(0,0,0,.25); color: rgba(255,255,255,.8); }
+    .chat-msgs { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:clamp(12px,3vw,20px); display:flex; flex-direction:column; gap:clamp(8px,2vw,12px); }
+    .mwrap { display:flex; flex-direction:column; }
+    .mwrap.user  { align-items:flex-end; }
+    .mwrap.agent { align-items:flex-start; }
+    .mbub { max-width:82%; padding:clamp(10px,2.5vw,14px) clamp(12px,3vw,18px); font-size:clamp(13px,3.2vw,15px); line-height:1.52; word-wrap:break-word; }
+    .mbub.agent { background:#1e1e1e; color:#f0ede6; border-radius:4px 18px 18px 18px; }
+    .mbub.user  { background:#1b2d52; color:#f0ede6; border-radius:18px 4px 18px 18px; }
+    .mtime { font-size:9.5px; opacity:.35; margin-top:3px; padding:0 3px; }
 
-    .sub  { font-size: var(--f-xs); opacity: .6; margin-top: clamp(2px,.8vw,4px); }
-    .meta {
-      font-size: var(--f-xs);
-      font-weight: 500;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      opacity: .45;
-      margin-top: clamp(4px,1.2vw,8px);
-    }
+    .twrap { display:flex; gap:5px; align-items:center; padding:13px 16px; background:#1e1e1e; border-radius:4px 18px 18px 18px; width:fit-content; }
+    .tdot  { width:7px; height:7px; border-radius:50%; background:#777; animation:tdot 1.3s infinite ease-in-out; }
+    .tdot:nth-child(2) { animation-delay:.18s; }
+    .tdot:nth-child(3) { animation-delay:.36s; }
+    @keyframes tdot { 0%,60%,100%{transform:translateY(0);opacity:.35;} 30%{transform:translateY(-6px);opacity:1;} }
 
-    /* Available / New Launch button */
-    .pill-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: clamp(4px,1.2vw,7px);
-      background: #c9a227;
-      color: #111;
-      border-radius: 50px;
-      padding: clamp(5px,1.5vw,9px) clamp(8px,2.2vw,14px);
-      font-size: var(--f-xs);
-      font-weight: 700;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      margin-top: clamp(8px,2vw,14px);
-    }
+    .chips { display:flex; gap:7px; padding:8px clamp(12px,3vw,18px) 10px; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    .chips::-webkit-scrollbar { display:none; }
+    .chip { white-space:nowrap; background:#1a1a1a; border:1px solid #2a2a2a; border-radius:50px; padding:7px 13px; font-size:12px; font-weight:500; color:#bbb; cursor:pointer; flex-shrink:0; transition:background .12s; }
+    .chip:active { background:#242424; }
 
-    .pill-btn .bd { width: clamp(4px,1vw,6px); height: clamp(4px,1vw,6px); border-radius: 50%; background: #111; }
-
-    /* Toggle pill */
-    .toggle-pill {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(0,0,0,.28);
-      border-radius: 50px;
-      padding: clamp(6px,1.8vw,10px) clamp(8px,2vw,12px);
-      margin-top: clamp(8px,2vw,12px);
-    }
-
-    .toggle-pill span { font-size: var(--f-xs); font-weight: 500; color: rgba(255,255,255,.9); }
-
-    .toggle {
-      width: clamp(26px,6.5vw,38px);
-      height: clamp(15px,3.8vw,22px);
-      border-radius: 50px;
-      position: relative;
-      flex-shrink: 0;
-    }
-
-    .toggle::after {
-      content: '';
-      position: absolute;
-      right: 2px; top: 2px;
-      width: clamp(11px,2.8vw,18px);
-      height: clamp(11px,2.8vw,18px);
-      border-radius: 50%;
-      background: #fff;
-    }
-
-    .t-blue   { background: #007aff; }
-    .t-purple { background: #9b59b6; }
-
-    /* Data rows */
-    .data-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: var(--f-xs);
-      margin-bottom: clamp(1px,.5vw,3px);
-    }
-
-    .data-row .lbl { opacity: .6; }
-    .data-row .val { font-weight: 600; }
-
-    /* Dot grid */
-    .dot-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: clamp(3px,.8vw,5px);
-      margin: clamp(6px,1.8vw,10px) 0;
-    }
-
-    .dg { aspect-ratio:1; border-radius: 50%; background: rgba(0,0,0,.18); }
-    .dg.hi { background: #c05040; }
-
-    /* Arch (Etisalat) */
-    .arch {
-      width: clamp(38px,10vw,64px);
-      height: clamp(44px,12vw,76px);
-      border: clamp(3px,.8vw,6px) solid rgba(0,0,0,.2);
-      border-radius: 100px 100px 0 0;
-      margin: clamp(6px,1.8vw,10px) auto clamp(2px,.6vw,4px);
-    }
-
-    /* Watermark */
-    .wm {
-      position: absolute;
-      bottom: -14px; right: -4px;
-      font-family: 'Playfair Display', serif;
-      font-weight: 900;
-      font-size: clamp(60px, 18vw, 110px);
-      opacity: .07;
-      line-height: 1;
-      pointer-events: none;
-    }
-
-    /* Mini avatar */
-    .mini-av {
-      width: clamp(26px,6.5vw,38px);
-      height: clamp(26px,6.5vw,38px);
-      border-radius: 50%;
-      background: #2e2e2e;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 600;
-      font-size: clamp(12px,3vw,17px);
-    }
-
-    /* DEWA oval */
-    .dewa-oval {
-      width: clamp(32px,8.5vw,52px);
-      height: clamp(22px,5.5vw,34px);
-      border-radius: 50%;
-      background: #c0392b;
-      margin: clamp(5px,1.5vw,9px) 0 clamp(3px,1vw,5px);
-    }
-
-    /* Express badge */
-    .express {
-      display: inline-block;
-      background: rgba(0,0,0,.3);
-      border-radius: 50px;
-      padding: clamp(4px,1.2vw,7px) clamp(7px,1.8vw,12px);
-      font-size: var(--f-xs);
-      font-weight: 600;
-      margin-top: clamp(6px,1.8vw,11px);
-      color: rgba(255,255,255,.85);
-    }
-
-    /* Dial knob */
-    .dial {
-      width: clamp(34px,8.5vw,54px);
-      height: clamp(34px,8.5vw,54px);
-      border-radius: 50%;
-      background: radial-gradient(circle at 38% 32%, #4a4a4a, #1a1a1a);
-      border: 2px solid #333;
-      margin: clamp(6px,1.8vw,10px) auto 0;
-    }
-
-    /* Top-Up button */
-    .topup-btn {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(0,0,0,.2);
-      border-radius: 50px;
-      padding: clamp(6px,1.8vw,10px) clamp(10px,2.5vw,16px);
-      margin-top: clamp(8px,2vw,13px);
-      font-size: var(--f-sm);
-      font-weight: 600;
-      color: #1a1a1a;
-    }
-
-    /* Damac background letters */
-    .damac-d {
-      position: absolute; top: 6px; left: 10px;
-      font-family: 'Playfair Display', serif; font-weight: 900;
-      font-size: clamp(50px, 14vw, 90px);
-      color: rgba(255,255,255,.1);
-      line-height: 1; pointer-events: none;
-    }
-    .damac-i {
-      position: absolute; bottom: clamp(36px,9vw,54px); left: clamp(14px,3.5vw,22px);
-      font-family: 'Playfair Display', serif; font-style: italic; font-weight: 400;
-      font-size: clamp(22px,6vw,38px);
-      color: rgba(255,255,255,.06);
-      pointer-events: none;
-    }
-
-    /* ── VERY SMALL PHONES (<340px) ─────────── */
-    @media (max-width: 339px) {
-      .grid { gap: 5px; }
-      .card { padding: 9px 8px; }
-    }
+    .cibar { display:flex; gap:9px; align-items:center; padding:clamp(8px,2vw,12px) clamp(12px,3vw,18px) clamp(14px,3.5vw,20px); border-top:1px solid rgba(255,255,255,.07); background:#111; }
+    .cin { flex:1; background:#1e1e1e; border:1px solid #2a2a2a; border-radius:50px; padding:clamp(10px,2.5vw,13px) clamp(14px,3.5vw,18px); color:#f0ede6; font-size:clamp(13px,3.2vw,15px); font-family:'Inter',sans-serif; outline:none; }
+    .cin::placeholder { color:#555; }
+    .cin:focus { border-color:#383838; }
+    .sbtn { width:clamp(40px,10vw,50px); height:clamp(40px,10vw,50px); border-radius:50%; background:#c9a227; border:none; outline:none; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:transform .12s ease; }
+    .sbtn:active { transform:scale(.9); }
   </style>
 </head>
 <body>
-<div class="app">
 
-  <!-- HEADER -->
+<!-- ══ HOME VIEW ══════════════════════════════ -->
+<div id="home">
+<div class="app">
   <header class="header">
-    <div class="loc">
-      <div class="loc-dot"></div>
-      <span id="loc-text">DUBAI · TUE 22 APR</span>
-    </div>
+    <div class="loc"><div class="loc-dot"></div><span id="loc-text">DUBAI · TUE 22 APR</span></div>
     <div class="avatar">S</div>
   </header>
-
-  <!-- GREETING -->
-  <h1 class="greeting">
-    <span id="greeting-text">Good evening, </span><span class="name">Sara.</span>
-  </h1>
-
-  <!-- SEARCH -->
+  <h1 class="greeting"><span id="greeting-text">Good evening, </span><span class="name">Sara.</span></h1>
   <div class="search">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-    </svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     <input type="text" placeholder="Search or ask…">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-      <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-      <line x1="12" y1="19" x2="12" y2="23"/>
-      <line x1="8" y1="23" x2="16" y2="23"/>
-    </svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
   </div>
 
-  <!-- CARD GRID -->
   <div class="grid">
-
-    <!-- ════ COLUMN 1 ════ -->
+    <!-- COL 1 -->
     <div class="col">
-
-      <!-- Emirates NBD -->
-      <div class="card navy">
-        <div class="row">
-          <span class="f-xs" style="opacity:.45;letter-spacing:.06em;">01</span>
-          <div class="cbtn cb-gold">✓</div>
-        </div>
+      <div class="card navy" onclick="openBiz('emirates-nbd')">
+        <div class="row"><span class="f-xs" style="opacity:.45;letter-spacing:.06em;">01</span><div class="cbtn cb-gold">✓</div></div>
         <div class="f-xl" style="margin-top:4px;color:#f0ede6;">Emirates<br>NBD</div>
         <div class="meta">Banking · &lt;1 Min</div>
         <div class="pill-btn"><span class="bd"></span>Available<span>→</span></div>
       </div>
-
-      <!-- RTA Dubai -->
-      <div class="card dark">
-        <div class="row">
-          <span class="f-xs" style="opacity:.4;letter-spacing:.08em;text-transform:uppercase;">VRFD · 24</span>
-          <div class="dot dot-gold"></div>
-        </div>
+      <div class="card dark" onclick="openBiz('rta')">
+        <div class="row"><span class="f-xs" style="opacity:.4;letter-spacing:.08em;text-transform:uppercase;">VRFD · 24</span><div class="dot dot-gold"></div></div>
         <div class="mini-av" style="margin-top:4px;">R</div>
         <div class="f-base" style="margin-top:6px;">RTA Dubai</div>
         <div class="meta">2 Min</div>
       </div>
-
-      <!-- ADCB -->
-      <div class="card wine">
-        <div class="row">
-          <span class="f-xs" style="font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.85;">ADCB</span>
-          <div class="dot dot-red"></div>
-        </div>
+      <div class="card wine" onclick="openBiz('adcb')">
+        <div class="row"><span class="f-xs" style="font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.85;">ADCB</span><div class="dot dot-red"></div></div>
         <div style="margin-top:6px;">
           <div class="data-row"><span class="lbl">Statement</span><span class="val">Apr</span></div>
           <div class="data-row"><span class="lbl">Min. due</span><span class="val">350</span></div>
           <div class="data-row"><span class="lbl">Available</span><span class="val">12.4k</span></div>
         </div>
       </div>
-
-      <!-- Banking -->
-      <div class="card wine">
+      <div class="card wine" onclick="openBiz('adcb')">
         <div class="f-xl" style="color:#f0ede6;">Banking</div>
-        <div style="display:flex;justify-content:flex-end;margin-top:clamp(8px,2vw,12px);">
-          <div class="cbtn cb-dark">→</div>
-        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:10px;"><div class="cbtn cb-dark">→</div></div>
       </div>
-
-      <!-- Carrefour -->
-      <div class="card cream">
-        <div class="row">
-          <div class="tag dt">Retail</div>
-          <div class="cbtn cb-dark">→</div>
-        </div>
+      <div class="card cream" onclick="openBiz('carrefour')">
+        <div class="row"><div class="tag dt">Retail</div><div class="cbtn cb-dark">→</div></div>
         <div class="dot-grid">
           <div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div>
           <div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div>
@@ -506,215 +253,517 @@
         <div class="f-md" style="color:#1a1a1a;">Carrefour</div>
         <div class="meta" style="color:#1a1a1a;">2 Min</div>
       </div>
-
-      <!-- Emaar Props -->
-      <div class="card navy">
-        <div class="row">
-          <div class="tag">Developer</div>
-          <div class="dot dot-red"></div>
-        </div>
+      <div class="card navy" onclick="openBiz('emaar')">
+        <div class="row"><div class="tag">Developer</div><div class="dot dot-red"></div></div>
         <div class="f-lg-b" style="color:#f0ede6;margin-top:2px;line-height:1.1;">Emaar<br>Props.</div>
         <div class="meta">Real Estate</div>
         <div class="pill-btn"><span class="bd"></span>New Launch</div>
       </div>
-
-      <!-- Aramex -->
-      <div class="card dark">
-        <div class="row">
-          <div class="tag">Courier</div>
-          <div class="dot dot-red"></div>
-        </div>
+      <div class="card dark" onclick="openBiz('aramex')">
+        <div class="row"><div class="tag">Courier</div><div class="dot dot-red"></div></div>
         <div class="f-lg-b" style="color:#f0ede6;margin-top:2px;">Aramex</div>
         <div class="sub">Out for delivery</div>
       </div>
+    </div>
 
-    </div><!-- /col1 -->
-
-    <!-- ════ COLUMN 2 ════ -->
+    <!-- COL 2 -->
     <div class="col">
-
-      <!-- Aster Clinic -->
-      <div class="card cream">
-        <div class="row">
-          <div class="tag dt">Next Slot</div>
-          <div class="dot dot-red"></div>
-        </div>
+      <div class="card cream" onclick="openBiz('aster')">
+        <div class="row"><div class="tag dt">Next Slot</div><div class="dot dot-red"></div></div>
         <div class="f-giant" style="color:#1a1a1a;margin:2px 0;">2m</div>
         <div class="f-sm" style="font-weight:500;color:#333;">Aster Clinic</div>
       </div>
-
-      <!-- Etisalat -->
-      <div class="card gold">
-        <div class="row">
-          <div class="f-lg" style="color:#1a1a1a;">Etisalat</div>
-          <div class="cbtn cb-black">✓</div>
-        </div>
+      <div class="card gold" onclick="openBiz('etisalat')">
+        <div class="row"><div class="f-lg" style="color:#1a1a1a;">Etisalat</div><div class="cbtn cb-black">✓</div></div>
         <div class="arch"></div>
-        <div class="toggle-pill">
-          <span>Telecom · 3 min</span>
-          <div class="toggle t-blue"></div>
-        </div>
+        <div class="toggle-pill"><span>Telecom · 3 min</span><div class="toggle t-blue"></div></div>
       </div>
-
-      <!-- Meraas -->
-      <div class="card cream" style="position:relative;">
-        <div class="row">
-          <div class="tag dt">Real Estate</div>
-          <div class="dot dot-red"></div>
-        </div>
+      <div class="card cream" style="position:relative;" onclick="openBiz('meraas')">
+        <div class="row"><div class="tag dt">Real Estate</div><div class="dot dot-red"></div></div>
         <div class="f-lg" style="color:#1a1a1a;">Meraas</div>
         <div class="meta" style="color:#1a1a1a;">5 Min</div>
         <div class="wm" style="color:#1a1a1a;">M</div>
       </div>
-
-      <!-- Damac Properties -->
-      <div class="card navy" style="min-height:clamp(110px,28vw,160px);position:relative;">
-        <div class="damac-d">D</div>
-        <div class="damac-i">I</div>
+      <div class="card navy" style="min-height:clamp(110px,28vw,160px);position:relative;" onclick="openBiz('damac')">
+        <div class="damac-d">D</div><div class="damac-i">I</div>
         <div class="dot dot-gold" style="position:absolute;top:13px;right:13px;"></div>
         <div style="position:absolute;bottom:13px;left:13px;">
           <div class="f-base" style="color:#f0ede6;line-height:1.3;">Damac<br>Properties</div>
           <div class="meta">Real Estate</div>
         </div>
       </div>
-
-      <!-- Spinneys -->
-      <div class="card forest">
-        <div class="row">
-          <div class="tag">Grocery</div>
-          <div class="cbtn cb-light">→</div>
-        </div>
+      <div class="card forest" onclick="openBiz('spinneys')">
+        <div class="row"><div class="tag">Grocery</div><div class="cbtn cb-light">→</div></div>
         <div class="f-lg" style="color:#f0ede6;margin-top:2px;">Spinneys</div>
         <div class="sub">Fresh · 4 min</div>
       </div>
-
-      <!-- Salik -->
-      <div class="card gold">
-        <div class="row">
-          <div class="tag dt">Toll</div>
-          <div class="cbtn cb-black">✓</div>
-        </div>
+      <div class="card gold" onclick="openBiz('salik')">
+        <div class="row"><div class="tag dt">Toll</div><div class="cbtn cb-black">✓</div></div>
         <div class="f-xl" style="color:#1a1a1a;margin-top:2px;">Salik</div>
         <div class="f-xs" style="color:rgba(0,0,0,.55);margin-top:3px;">Road Toll · Dubai</div>
       </div>
-
-      <!-- AED 48 Top Up -->
-      <div class="card gold">
+      <div class="card gold" onclick="openBiz('salik')">
         <div class="f-aed" style="color:#1a1a1a;">AED<br>48</div>
-        <div class="topup-btn">
-          <span>Top Up</span>
-          <span>→</span>
-        </div>
+        <div class="topup-btn"><span>Top Up</span><span>→</span></div>
       </div>
+    </div>
 
-    </div><!-- /col2 -->
-
-    <!-- ════ COLUMN 3 ════ -->
+    <!-- COL 3 -->
     <div class="col">
-
-      <!-- Talabat -->
-      <div class="card coral">
-        <div class="row">
-          <div class="tag">Food</div>
-          <div class="cbtn cb-dark">→</div>
-        </div>
+      <div class="card coral" onclick="openBiz('talabat')">
+        <div class="row"><div class="tag">Food</div><div class="cbtn cb-dark">→</div></div>
         <div class="f-xl" style="color:#f0ede6;margin-top:2px;">Talabat</div>
         <div class="sub">Talabat · &lt;1 min</div>
       </div>
-
-      <!-- DEWA -->
-      <div class="card cream">
-        <div class="row">
-          <div class="tag dt">Utilities</div>
-          <div class="dot dot-red"></div>
-        </div>
+      <div class="card cream" onclick="openBiz('dewa')">
+        <div class="row"><div class="tag dt">Utilities</div><div class="dot dot-red"></div></div>
         <div class="dewa-oval"></div>
         <div class="f-sm" style="font-weight:700;color:#222;">DEWA</div>
         <div class="meta" style="color:#1a1a1a;">&lt;1 Min Wait</div>
       </div>
-
-      <!-- Noon -->
-      <div class="card coral">
-        <div class="row">
-          <div class="tag">E-Commerce</div>
-          <div class="cbtn cb-dark">→</div>
-        </div>
+      <div class="card coral" onclick="openBiz('noon')">
+        <div class="row"><div class="tag">E-Commerce</div><div class="cbtn cb-dark">→</div></div>
         <div class="f-xl" style="color:#f0ede6;margin-top:2px;">Noon</div>
         <div class="sub">noon.com · UAE</div>
         <div class="express">Express · 2 hr</div>
       </div>
-
-      <!-- LuLu -->
-      <div class="card cream">
-        <div class="row">
-          <div class="tag dt">Retail</div>
-          <div class="cbtn cb-dark">→</div>
-        </div>
+      <div class="card cream" onclick="openBiz('lulu')">
+        <div class="row"><div class="tag dt">Retail</div><div class="cbtn cb-dark">→</div></div>
         <div class="f-lg" style="color:#1a1a1a;margin-top:2px;">LuLu</div>
         <div class="f-xs" style="color:#444;margin-top:2px;">Hypermarket</div>
         <div class="meta" style="color:#1a1a1a;">3 Min</div>
       </div>
-
-      <!-- du -->
-      <div class="card dark">
-        <div class="row">
-          <div class="f-lg" style="color:#f0ede6;">du</div>
-          <div class="cbtn cb-gold">✓</div>
-        </div>
+      <div class="card dark" onclick="openBiz('du')">
+        <div class="row"><div class="f-lg" style="color:#f0ede6;">du</div><div class="cbtn cb-gold">✓</div></div>
         <div class="dial"></div>
       </div>
-
-      <!-- Mobile (du telecom) -->
-      <div class="card dark">
+      <div class="card dark" onclick="openBiz('du')">
         <div class="tag">Telecom</div>
         <div class="f-sm" style="font-weight:500;margin-top:4px;">Mobile · 2 min</div>
-        <div style="display:flex;justify-content:flex-end;margin-top:8px;">
-          <div class="toggle t-purple"></div>
-        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:8px;"><div class="toggle t-purple"></div></div>
       </div>
-
-      <!-- Fetchr -->
-      <div class="card cream">
-        <div class="row">
-          <div class="tag dt">Delivery</div>
-          <div class="dot dot-gold"></div>
-        </div>
+      <div class="card cream" onclick="openBiz('fetchr')">
+        <div class="row"><div class="tag dt">Delivery</div><div class="dot dot-gold"></div></div>
         <div class="f-lg" style="color:#1a1a1a;margin-top:2px;">Fetchr</div>
         <div class="sub" style="color:#555;">1 parcel · Today</div>
       </div>
-
-      <!-- Zomato -->
-      <div class="card coral">
-        <div class="row">
-          <div class="tag">Food</div>
-          <div class="cbtn cb-dark">→</div>
-        </div>
+      <div class="card coral" onclick="openBiz('zomato')">
+        <div class="row"><div class="tag">Food</div><div class="cbtn cb-dark">→</div></div>
         <div class="f-xl" style="color:#f0ede6;margin-top:2px;">Zomato</div>
         <div class="sub">&lt;30 min</div>
       </div>
+    </div>
+  </div>
+</div>
+</div>
 
-    </div><!-- /col3 -->
+<!-- ══ BUSINESS VIEW ══════════════════════════ -->
+<div id="biz" class="sview"></div>
 
-  </div><!-- /grid -->
-</div><!-- /app -->
+<!-- ══ CHAT VIEW ══════════════════════════════ -->
+<div id="chat" class="sview"></div>
 
 <script>
-  (function () {
-    const now = new Date();
-    const h = now.getHours();
-    const greet = h < 12 ? 'Good morning, ' : h < 17 ? 'Good afternoon, ' : 'Good evening, ';
-    document.getElementById('greeting-text').textContent = greet;
+/* ── BUSINESS DATA ───────────────────────────── */
+const BIZ = {
+  'emirates-nbd': {
+    name:'Emirates NBD', bg:'#1b2d52', fg:'#f0ede6', cat:'Banking', av:'EN',
+    line:'Your complete digital banking assistant',
+    hi:"Hello Sara! I'm your Emirates NBD assistant. I can help with balances, transfers, card services and more. What do you need today?",
+    opts:[
+      {e:'💳',l:'Account Balance',d:'View all accounts & cards'},
+      {e:'↗️',l:'Money Transfer',d:'Local & international transfers'},
+      {e:'📄',l:'Pay Bills',d:'DEWA, telecom, government fees'},
+      {e:'🔐',l:'Card Services',d:'Manage, block or replace cards'},
+      {e:'🏠',l:'Home Finance',d:'Rates & eligibility check'},
+      {e:'📊',l:'Investments',d:'Grow your savings'},
+    ],
+    r:["Your current account balance is AED 24,580 and savings account has AED 12,400. Would you like a full breakdown?","I can initiate a transfer. Please provide the recipient's IBAN and amount. Would you like to proceed?","Your DEWA bill is AED 380, Etisalat AED 180, and credit card minimum is AED 350. Shall I queue all payments?","Your Visa card (ending 4821) has AED 15,000 available credit. Want to manage your card settings?","Based on your profile you're eligible for home finance up to AED 1.2M at 3.8% p.a. Shall I start an application?"]
+  },
+  'talabat': {
+    name:'Talabat', bg:'#bf4e3a', fg:'#f0ede6', cat:'Food Delivery', av:'TA',
+    line:'Food & groceries at your door in minutes',
+    hi:"Hi Sara! 🍔 I'm your Talabat assistant. Ready to order? I can find restaurants, track your delivery, or show today's best deals!",
+    opts:[
+      {e:'🍕',l:'Order Food',d:'Browse 1,000+ restaurants'},
+      {e:'📍',l:'Track Order',d:'Live delivery tracking'},
+      {e:'🏷️',l:'Deals & Offers',d:'Up to 50% off today'},
+      {e:'🛒',l:'Groceries',d:'Delivered in 30 mins'},
+    ],
+    r:["I found 42 restaurants near you open right now. Zaatar w Zeit, Shake Shack & Kcal are trending. Filter by cuisine?","Your last order from McDonald's JBR was AED 68. Want to reorder the same items?","Today's top deal: Burger Fuel 30% off + free delivery. Also, Biryani Pot has a meal deal at AED 35!","Your groceries from Carrefour will arrive in 28 minutes. Want a live tracking link?"]
+  },
+  'dewa': {
+    name:'DEWA', bg:'#e8dfcc', fg:'#1a1a1a', cat:'Utilities', av:'DW',
+    line:'Dubai Electricity & Water Authority',
+    hi:"Hello Sara! I'm your DEWA assistant. Wait time is under 1 minute. I can check your bill, arrange payment, or report an issue.",
+    opts:[
+      {e:'💡',l:'View Bill',d:'Current & past statements'},
+      {e:'💳',l:'Pay Bill',d:'Quick one-click payment'},
+      {e:'📊',l:'Usage Report',d:'Electricity & water stats'},
+      {e:'⚡',l:'Report Issue',d:'Outage or fault report'},
+      {e:'🌱',l:'Green Energy',d:'Shams Dubai solar options'},
+    ],
+    r:["Your DEWA bill for April is AED 380, due 25th April. Average monthly consumption: 680 kWh. Process payment now?","Payment of AED 380 processed! Reference: DEWA-2024-04821. SMS confirmation sent.","This month you used 680 kWh electricity and 18 m³ water — 12% less than March. Great savings!","Outage report logged for Jumeirah 1. A team has been dispatched. Estimated resolution: 2 hours."]
+  },
+  'noon': {
+    name:'Noon', bg:'#bf4e3a', fg:'#f0ede6', cat:'E-Commerce', av:'NO',
+    line:'Shop millions of products across the UAE',
+    hi:"Hi Sara! Welcome to Noon 🛍 I'm here to help you shop, track orders, or handle returns. Up to 70% off electronics today!",
+    opts:[
+      {e:'🛍️',l:'Shop Now',d:'Browse millions of products'},
+      {e:'📦',l:'My Orders',d:'Track & manage orders'},
+      {e:'↩️',l:'Returns',d:'Easy 15-day returns'},
+      {e:'⚡',l:'Flash Deals',d:'Limited time offers'},
+      {e:'🚚',l:'Express Delivery',d:'Get it in 2 hours'},
+    ],
+    r:["Samsung Galaxy S24 is top rated and 35% off today — AED 2,999 (was AED 4,599). Add to cart?","Your order #NOON-48291 is out for delivery and arrives between 2–4 PM. Track it live?","Return for Nike shoes approved. AED 245 refund credited to your noon wallet in 3–5 days.","Flash deal ending in 2 hrs: Apple AirPods Pro for AED 649 (35% off). Only 12 units left!"]
+  },
+  'etisalat': {
+    name:'Etisalat', bg:'#c9a227', fg:'#1a1a1a', cat:'Telecom', av:'ET',
+    line:"Stay connected with the UAE's leading network",
+    hi:"Hello Sara! I'm your Etisalat assistant. I can help you manage your plan, check data balance, or explore upgrades!",
+    opts:[
+      {e:'📱',l:'My Plan',d:'View current plan details'},
+      {e:'📶',l:'Data Balance',d:'Check remaining data'},
+      {e:'⬆️',l:'Upgrade Plan',d:'Better value plans available'},
+      {e:'🌍',l:'International',d:'Roaming & IDD rates'},
+      {e:'📡',l:'Home Internet',d:'Fibre & broadband plans'},
+    ],
+    r:["You're on Smart Plan M (20 GB). You have 8.2 GB remaining, resets in 12 days. 340 of 500 minutes used.","Smart Plan XL: 50 GB + unlimited calls for AED 10 more/month. Want to switch?","International roaming activated. AED 25/day in the US, AED 15/day in GCC. Text STOP to deactivate.","Your home fibre (100 Mbps) renews April 28 at AED 299/month. Upgrade to 500 Mbps for AED 349?"]
+  },
+  'lulu': {
+    name:'LuLu Hypermarket', bg:'#e8dfcc', fg:'#1a1a1a', cat:'Retail', av:'LL',
+    line:"Your favourite hypermarket at your fingertips",
+    hi:"Hi Sara! Welcome to LuLu. I can help you shop online, check availability, find weekly offers, or track your delivery!",
+    opts:[
+      {e:'🛒',l:'Shop Online',d:'Browse all departments'},
+      {e:'🏷️',l:'Weekly Offers',d:'Fresh deals every week'},
+      {e:'🥩',l:'Fresh Produce',d:'Meat, seafood & veggies'},
+      {e:'📦',l:'My Orders',d:'Track home delivery'},
+      {e:'📍',l:'Store Locator',d:'Find nearest LuLu'},
+    ],
+    r:["That item is in stock at LuLu Mall of Emirates. Want me to add it to your cart for home delivery?","This week: Australian Beef 20% off, Fresh Atlantic Salmon AED 45/kg, Organic vegetables from AED 5!","Your order #LLH-29812 is being packed and will arrive in 2–3 hours. Notification on the way!","Nearest LuLu: Al Barsha — 2.3 km away, open until midnight. Need directions?"]
+  },
+  'aramex': {
+    name:'Aramex', bg:'#1c1c1c', fg:'#f0ede6', cat:'Courier', av:'AX',
+    line:'Fast, reliable delivery worldwide',
+    hi:"Hi Sara! Your parcel #AMX-8821943 is out for delivery today between 10am–2pm. How can I help?",
+    opts:[
+      {e:'📦',l:'Track Shipment',d:'Live parcel tracking'},
+      {e:'🚀',l:'Send a Package',d:'Local & international shipping'},
+      {e:'📅',l:'Schedule Pickup',d:'Book a collection slot'},
+      {e:'🔄',l:'Redirect Delivery',d:'Change delivery address'},
+    ],
+    r:["Your shipment #AMX-8821943 is out for delivery. Rider Ahmed is 3.2 km away. ETA: 11:30 AM. Track on map?","I can redirect to a different address or the nearest Aramex shop for collection. Which do you prefer?","2.3 kg to London: AED 85 standard (5–7 days) or AED 145 express (2 days). Which would you like?","Pickup scheduled for tomorrow 10am–12pm. Our driver will collect from your registered address."]
+  },
+  'salik': {
+    name:'Salik', bg:'#c9a227', fg:'#1a1a1a', cat:'Road Toll', av:'SK',
+    line:"Dubai's smart road toll system",
+    hi:"Hello Sara! Your Salik balance is AED 52. You used 3 toll gates this week (AED 12 charged). Top up or view history?",
+    opts:[
+      {e:'💰',l:'Top Up Balance',d:'Add credit to your account'},
+      {e:'📊',l:'Trip History',d:'View all toll charges'},
+      {e:'🚗',l:'Manage Vehicles',d:'Add or remove vehicles'},
+      {e:'📄',l:'Monthly Statement',d:'Billing summary & export'},
+    ],
+    r:["Top up successful! AED 100 added. New balance: AED 152. Set up auto top-up when below AED 20?","This week: Al Safa 4× (AED 16), Garhoud 2× (AED 8), Al Maktoum 1× (AED 4). Total: AED 28.","Auto top-up set up! AED 100 charged to your card whenever balance drops below AED 20.","April statement: 24 crossings, AED 96 total. Peak day: Monday April 8 with 5 crossings."]
+  },
+  'zomato': {
+    name:'Zomato', bg:'#bf4e3a', fg:'#f0ede6', cat:'Food Delivery', av:'ZO',
+    line:'Discover the best food around you',
+    hi:"Hey Sara! 🍽️ I'm your Zomato assistant. Hungry? I can suggest restaurants, track your order, or find the best deals near you!",
+    opts:[
+      {e:'🍽️',l:'Order Food',d:'Restaurants near you'},
+      {e:'⭐',l:'Top Rated',d:'Best reviewed this week'},
+      {e:'📍',l:'Track Order',d:'Real-time delivery map'},
+      {e:'🎁',l:'Zomato Pro',d:'Unlimited free delivery'},
+    ],
+    r:["85 restaurants open near you. Arabian cuisine trending tonight! Top pick: Reem Al Bawadi — 4.8 ⭐, 25 min delivery.","Your order from Zaatar w Zeit is 15 minutes away! Rider Omar is on his way. Track on map?","Zomato Pro gives unlimited free delivery. At your order frequency you'd save ~AED 180/month!","Today's top picks: Traiteur (French 4.9⭐), Bu Qtair (Seafood 4.8⭐), Logma (Emirati 4.7⭐). Order?"]
+  },
+  'spinneys': {
+    name:'Spinneys', bg:'#2b4530', fg:'#f0ede6', cat:'Grocery', av:'SP',
+    line:'Fresh groceries delivered to your door',
+    hi:"Hi Sara! 🥬 I'm your Spinneys assistant. Fresh produce, premium meat, weekly deals — what do you need today?",
+    opts:[
+      {e:'🥦',l:'Shop Groceries',d:'Fresh & organic produce'},
+      {e:'🥩',l:'Fresh Meat',d:'Halal & imported cuts'},
+      {e:'🏷️',l:'Weekly Deals',d:"This week's best offers"},
+      {e:'📦',l:'My Orders',d:'Track grocery delivery'},
+    ],
+    r:["Fresh arrivals: Organic strawberries, Italian mozzarella, NZ lamb. Shall I build a shopping list?","Your grocery order #SPY-11293 is being packed and will arrive in 35 minutes.","This week: Buy 2 get 1 on all Spinneys own-brand, 20% off imported cheese, bakery from AED 8.","I can suggest a weekly meal plan and auto-generate your shopping list. Want to try it?"]
+  },
+  'du': {
+    name:'du', bg:'#1d2124', fg:'#f0ede6', cat:'Telecom', av:'DU',
+    line:'Connected living, smarter every day',
+    hi:"Hello Sara! I'm your du assistant. I can help check your plan, manage data, or explore our latest bundles. How can I help?",
+    opts:[
+      {e:'📱',l:'My Plan',d:'View plan & usage details'},
+      {e:'📶',l:'Data Balance',d:'Remaining data & calls'},
+      {e:'⬆️',l:'Upgrade Plan',d:'Find a better plan'},
+      {e:'📞',l:'Roaming',d:'International & roaming rates'},
+      {e:'🏠',l:'Home Services',d:'Broadband & TV packages'},
+    ],
+    r:["You're on du Postpaid M. Remaining: 6.4 GB data, 180 mins calls. Resets in 8 days.","du Postpaid XL — 40 GB + unlimited local calls for AED 20 more/month. Want to switch?","Roaming activated in 30 countries. Standard rate AED 20/day. Shall I keep it active?","Home broadband (100 Mbps) renews May 1. Upgrade to 300 Mbps for AED 50 more/month?"]
+  },
+  'carrefour': {
+    name:'Carrefour', bg:'#e8dfcc', fg:'#1a1a1a', cat:'Retail', av:'CF',
+    line:'Everything you need, delivered fast',
+    hi:"Hi Sara! I'm your Carrefour assistant. I can help you shop, check offers, or track your delivery. What are you looking for?",
+    opts:[
+      {e:'🛒',l:'Shop Online',d:'Browse all categories'},
+      {e:'⚡',l:'Express Delivery',d:'In 2 hours or less'},
+      {e:'🏷️',l:'Latest Offers',d:'Great deals this week'},
+      {e:'📦',l:'My Orders',d:'Track your delivery'},
+    ],
+    r:["I found 340 matching items. The most popular is in stock at Carrefour Mall of Emirates. Add to cart?","Express 2-hour delivery available in your area. Order before 4 PM for delivery by 6 PM!","This week: 50% off Carrefour branded products, buy 2 get 1 on household essentials.","Your order #CFR-82911 has left the warehouse and arrives in approximately 90 minutes."]
+  },
+  'fetchr': {
+    name:'Fetchr', bg:'#e8dfcc', fg:'#1a1a1a', cat:'Delivery', av:'FT',
+    line:'Smart delivery, powered by technology',
+    hi:"Hi Sara! You have 1 parcel scheduled for delivery today. I'm your Fetchr assistant — how can I help?",
+    opts:[
+      {e:'📦',l:'Track Parcel',d:'Real-time parcel tracking'},
+      {e:'📅',l:'Reschedule',d:'Change delivery time slot'},
+      {e:'📍',l:'Change Address',d:'Redirect your parcel'},
+      {e:'📤',l:'Send a Parcel',d:'Book a new shipment'},
+    ],
+    r:["Your parcel #FTR-4892 from Amazon is out for delivery. Expected between 2–5 PM today. Track live?","Delivery rescheduled to tomorrow 10 AM–12 PM. You'll get an SMS reminder in the morning.","Address updated. Delivery team notified. No extra charges for this change.","Parcel delivered and left with building security at 3:42 PM. Signed receipt emailed to you."]
+  },
+  'rta': {
+    name:'RTA Dubai', bg:'#1c1c1c', fg:'#f0ede6', cat:'Transport', av:'RT',
+    line:"Dubai's Roads and Transport Authority",
+    hi:"Hello Sara! I'm your RTA assistant. I can help with vehicle registration, fines, driving licence, or public transport. How can I help?",
+    opts:[
+      {e:'🚗',l:'Vehicle Registration',d:'Renew or check status'},
+      {e:'🚌',l:'Public Transport',d:'Metro, bus & marine transit'},
+      {e:'📋',l:'Traffic Fines',d:'Check & pay fines'},
+      {e:'🪪',l:'Driving Licence',d:'Renew or replace licence'},
+      {e:'🚕',l:'Book a Taxi',d:'Dubai Taxi or Careem'},
+    ],
+    r:["Vehicle (A 12345) registration due 30 May. I can initiate the renewal online — need valid insurance.","No outstanding fines for your vehicle. Your driving record is clean!","Your Nol card balance is AED 24. Top up online or at any metro station. Daily cap: AED 20.","Driving licence expires 14 August. Needs: eye test + AED 110 fee. Book RTA appointment?"]
+  },
+  'adcb': {
+    name:'ADCB', bg:'#3c1020', fg:'#f0ede6', cat:'Banking', av:'AB',
+    line:'Your banking partner, always by your side',
+    hi:"Hello Sara! I'm your ADCB assistant. Minimum payment of AED 350 is due 28 April. How can I help you today?",
+    opts:[
+      {e:'💳',l:'Card Statement',d:'View transactions & balance'},
+      {e:'💰',l:'Pay Credit Card',d:'Minimum or full payment'},
+      {e:'📊',l:'Spending Analysis',d:'Where your money goes'},
+      {e:'🎁',l:'TouchPoints',d:'Redeem your rewards'},
+      {e:'🏦',l:'Loan Options',d:'Personal & auto loans'},
+    ],
+    r:["April statement: Total spend AED 4,280. Minimum due: AED 350. Payment due: 28 April. Pay now?","Payment of AED 350 processed. Remaining balance: AED 3,930. Set up auto-payment?","Top spending: Dining AED 1,200 · Shopping AED 980 · Fuel AED 450 · Groceries AED 380.","You have 12,400 TouchPoints. Redeem for AED 124 cashback, miles, or vouchers. Which prefer?"]
+  },
+  'meraas': {
+    name:'Meraas', bg:'#e8dfcc', fg:'#1a1a1a', cat:'Real Estate', av:'MR',
+    line:'Creating extraordinary places to live & play',
+    hi:"Hello Sara! Welcome to Meraas. I can help you explore residential properties, retail destinations, or book a viewing!",
+    opts:[
+      {e:'🏠',l:'Residential',d:'Apartments & villa communities'},
+      {e:'🏗️',l:'Off-Plan Projects',d:'New launches & reservations'},
+      {e:'🛍️',l:'Retail Destinations',d:'City Walk, La Mer & more'},
+      {e:'📅',l:'Book Viewing',d:'Schedule a property tour'},
+    ],
+    r:["Bluewaters Island: 2BR apartments from AED 2.8M with sea views. Payment plan 60/40. Brochure?","La Mer South Phase 3 — 1BR from AED 1.4M, 2BR from AED 2.1M. Handover Q4 2025. Register interest?","City Walk Residences viewing available this Saturday at 11 AM or 2 PM. Which works for you?","Your interest in Meraas Bluewaters noted. A sales consultant will contact you within 24 hours."]
+  },
+  'damac': {
+    name:'Damac Properties', bg:'#1b2d52', fg:'#f0ede6', cat:'Real Estate', av:'DC',
+    line:'Luxury living redefined across the UAE',
+    hi:"Hello Sara! Welcome to Damac Properties. I can help you discover luxury projects, check availability, or book a private viewing!",
+    opts:[
+      {e:'🏙️',l:'Browse Projects',d:'Luxury residential projects'},
+      {e:'💎',l:'Luxury Villas',d:'Exclusive villa communities'},
+      {e:'📍',l:'Project Map',d:'Locations across the UAE'},
+      {e:'📅',l:'Book Viewing',d:'Private property tour'},
+      {e:'💰',l:'Payment Plans',d:'Flexible payment options'},
+    ],
+    r:["DAMAC Hills 2: 4BR villas from AED 1.89M, 70/30 payment plan. Shall I send you project details?","DAMAC Lagoons: Mediterranean-inspired living, 3BR townhouses from AED 1.65M. Ready Q2 2026.","Private viewing at DAMAC Hills scheduled for Saturday 10 AM. Agent will confirm shortly.","Payment plan: 1% monthly during construction + 30% on handover. 0% interest, 0 service charge 3 years."]
+  },
+  'emaar': {
+    name:'Emaar Properties', bg:'#1b2d52', fg:'#f0ede6', cat:'Real Estate', av:'EM',
+    line:"Dubai's most iconic real estate developer",
+    hi:"Hello Sara! Welcome to Emaar Properties. Downtown Dubai, Dubai Hills, Beachfront — I can help you find your dream home!",
+    opts:[
+      {e:'🏙️',l:'Downtown Dubai',d:'Iconic city centre living'},
+      {e:'🌊',l:'Beachfront Living',d:'Emaar Beachfront projects'},
+      {e:'⛳',l:'Dubai Hills',d:'Premium golf course community'},
+      {e:'🆕',l:'New Launches',d:'Latest off-plan projects'},
+      {e:'📅',l:'Book Viewing',d:'Schedule a private tour'},
+    ],
+    r:["Dubai Hills Estate — Parkside Views: 1BR from AED 1.15M. 10% booking, 1% monthly. Register?","Downtown Views III: 2BR with Burj Khalifa view from AED 2.8M. Handover Q4 2026. Only 40 units!","Emaar Beachfront viewing booked: Sunday 14 April at 3 PM. Sales consultant meets you on-site.","Emaar payment plan: 20% booking, 40% construction, 40% handover. 0% DLD on selected units."]
+  },
+  'aster': {
+    name:'Aster Clinic', bg:'#e8dfcc', fg:'#1a1a1a', cat:'Healthcare', av:'AS',
+    line:'Quality healthcare, when you need it most',
+    hi:"Hello Sara! A slot is available in 2 minutes at Aster Clinic. I'm your health assistant — how can I help you today?",
+    opts:[
+      {e:'👨‍⚕️',l:'Book Appointment',d:'See a doctor today'},
+      {e:'💊',l:'Prescriptions',d:'Refill or check medication'},
+      {e:'🧪',l:'Lab Tests',d:'Book blood & diagnostic tests'},
+      {e:'🚑',l:'Home Visit',d:'Doctor comes to you'},
+      {e:'📋',l:'Medical Records',d:'View your health history'},
+    ],
+    r:["Dr. Sarah Al Hashimi (General Medicine) available in 5 minutes. Confirm appointment? Fee: AED 150.","Your Vitamin D3 prescription renewed. Pick up from any Aster pharmacy or get home delivery.","Blood test package: CBC + Vitamin D + Thyroid. Home collection today 9AM–6PM for AED 120. Book?","Home visit by Dr. Ahmad scheduled for today at 4 PM. Fee: AED 350 (consultation + basic checkup)."]
+  },
+};
 
-    const days   = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
-    const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-    document.getElementById('loc-text').textContent =
-      `DUBAI · ${days[now.getDay()]} ${now.getDate()} ${months[now.getMonth()]}`;
+/* ── NAVIGATION ───────────────────────────────── */
+function openBiz(id) {
+  const b = BIZ[id] || {
+    name:id, bg:'#1c1c1c', fg:'#f0ede6', cat:'Service', av:id.slice(0,2).toUpperCase(),
+    line:'Your trusted service partner in Dubai',
+    hi:`Hello Sara! I'm your ${id} assistant. How can I help you today?`,
+    opts:[
+      {e:'🔍',l:'Browse Services',d:'View all available options'},
+      {e:'💬',l:'Get Support',d:'Chat with an agent now'},
+      {e:'📄',l:'My Account',d:'Manage your profile'},
+      {e:'🎯',l:'Offers & Deals',d:'Latest promotions for you'},
+    ],
+    r:["I can help you with that! Let me look into it right away.","Sure Sara! What would you like to know?","I'm on it — give me just a moment."]
+  };
 
-    // Register service worker for PWA / offline support
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').catch(() => {});
-    }
-  })();
+  const deco = b.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+
+  document.getElementById('biz').innerHTML = `
+    <div class="nbar">
+      <div class="back" onclick="closeBiz()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </div>
+    </div>
+    <div class="biz-hero" style="background:${b.bg};color:${b.fg}">
+      <div class="biz-cat">${b.cat}</div>
+      <div class="biz-name">${b.name}</div>
+      <div class="biz-line">${b.line}</div>
+      <div class="biz-deco">${deco}</div>
+    </div>
+    <div class="opts-hd">How can we help?</div>
+    <div class="opts-grid">
+      ${b.opts.map((o,i)=>`
+        <div class="opt-card" onclick="openChat('${id}',${i})">
+          <div class="opt-icon">${o.e}</div>
+          <div class="opt-label">${o.l}</div>
+          <div class="opt-desc">${o.d}</div>
+        </div>`).join('')}
+    </div>`;
+
+  requestAnimationFrame(() => document.getElementById('biz').classList.add('open'));
+}
+
+function closeBiz() {
+  document.getElementById('biz').classList.remove('open');
+  document.getElementById('chat').classList.remove('open');
+}
+
+function openChat(bizId, optIdx) {
+  const b = BIZ[bizId] || BIZ['emirates-nbd'];
+  const opt = b.opts[optIdx] || b.opts[0];
+  document.getElementById('chat').dataset.biz = bizId;
+
+  document.getElementById('chat').innerHTML = `
+    <div class="nbar">
+      <div class="back" onclick="closeChat()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;flex:1;">
+        <div class="ag-av" style="background:${b.bg};color:${b.fg}">${b.av}</div>
+        <div>
+          <div class="ag-name">${b.name}</div>
+          <div class="ag-status">● Online</div>
+        </div>
+      </div>
+    </div>
+    <div class="chat-msgs" id="cmsgs"></div>
+    <div class="chips" id="chips">
+      ${b.opts.slice(0,3).map(o=>`<span class="chip" onclick="sendChip('${o.l}')">${o.e} ${o.l}</span>`).join('')}
+    </div>
+    <div class="cibar">
+      <input class="cin" id="cin" placeholder="Type a message…" onkeydown="if(event.key==='Enter')sendMsg()">
+      <button class="sbtn" onclick="sendMsg()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>`;
+
+  requestAnimationFrame(() => {
+    document.getElementById('chat').classList.add('open');
+    setTimeout(() => {
+      addMsg(b.hi, 'agent');
+      setTimeout(() => addMsg(`You selected <strong>${opt.e} ${opt.l}</strong> — ${opt.d}. How can I help you with this?`, 'agent'), 900);
+    }, 350);
+  });
+}
+
+function closeChat() {
+  document.getElementById('chat').classList.remove('open');
+}
+
+/* ── CHAT ─────────────────────────────────────── */
+function addMsg(html, type) {
+  const box = document.getElementById('cmsgs');
+  if (!box) return;
+  const t = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  const d = document.createElement('div');
+  d.className = `mwrap ${type}`;
+  d.innerHTML = `<div class="mbub ${type}">${html}</div><div class="mtime">${t}</div>`;
+  box.appendChild(d);
+  box.scrollTop = box.scrollHeight;
+}
+
+function showTyping() {
+  const box = document.getElementById('cmsgs');
+  if (!box) return;
+  const d = document.createElement('div');
+  d.id = 'tdot'; d.className = 'mwrap agent';
+  d.innerHTML = `<div class="twrap"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div>`;
+  box.appendChild(d);
+  box.scrollTop = box.scrollHeight;
+}
+
+function hideTyping() {
+  const el = document.getElementById('tdot');
+  if (el) el.remove();
+}
+
+function sendMsg() {
+  const inp = document.getElementById('cin');
+  if (!inp) return;
+  const txt = inp.value.trim();
+  if (!txt) return;
+  addMsg(txt, 'user');
+  inp.value = '';
+  const chips = document.getElementById('chips');
+  if (chips) chips.style.display = 'none';
+  setTimeout(() => {
+    showTyping();
+    const bizId = document.getElementById('chat').dataset.biz;
+    const b = BIZ[bizId];
+    const pool = b ? b.r : ["I can help you with that!","Sure Sara, let me look into it.","Got it — one moment please."];
+    setTimeout(() => {
+      hideTyping();
+      addMsg(pool[Math.floor(Math.random() * pool.length)], 'agent');
+    }, 1200 + Math.random() * 800);
+  }, 400);
+}
+
+function sendChip(label) {
+  const inp = document.getElementById('cin');
+  if (inp) { inp.value = label; sendMsg(); }
+}
+
+/* ── INIT ─────────────────────────────────────── */
+(function(){
+  const now = new Date();
+  const h = now.getHours();
+  document.getElementById('greeting-text').textContent =
+    h < 12 ? 'Good morning, ' : h < 17 ? 'Good afternoon, ' : 'Good evening, ';
+  const D = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+  const M = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  document.getElementById('loc-text').textContent =
+    `DUBAI · ${D[now.getDay()]} ${now.getDate()} ${M[now.getMonth()]}`;
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+})();
 </script>
 </body>
 </html>
