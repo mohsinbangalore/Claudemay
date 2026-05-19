@@ -10,34 +10,62 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    /* ── FLUID SCALE TOKENS ─────────────────── */
+    :root {
+      --gap:        clamp(6px,  1.8vw, 16px);
+      --card-px:    clamp(10px, 2.8vw, 22px);
+      --card-py:    clamp(10px, 2.8vw, 22px);
+      --radius:     clamp(14px, 3.5vw, 26px);
+      --app-px:     clamp(12px, 4vw,   40px);
+      --app-pt:     clamp(22px, 5vw,   52px);
+
+      /* fluid font sizes */
+      --f-giant:  clamp(30px, 9.5vw, 58px);   /* Aster "2m" */
+      --f-aed:    clamp(24px, 7.5vw, 46px);   /* AED 48 */
+      --f-xl:     clamp(17px, 5.2vw, 34px);   /* main titles */
+      --f-lg:     clamp(14px, 4.2vw, 28px);   /* mid titles */
+      --f-md:     clamp(12px, 3.5vw, 22px);   /* smaller titles */
+      --f-base:   clamp(10px, 2.8vw, 15px);   /* body */
+      --f-sm:     clamp(9px,  2.4vw, 13px);   /* sub */
+      --f-xs:     clamp(7.5px,1.9vw, 11px);   /* tags/labels */
+
+      /* component sizes */
+      --btn-sz:   clamp(22px, 5.5vw, 34px);
+      --av-sz:    clamp(36px, 8vw,   50px);
+      --dot-sz:   clamp(6px,  1.5vw, 9px);
+    }
+
     body {
       background: #111;
       color: #f0ede6;
       font-family: 'Inter', -apple-system, sans-serif;
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
     }
 
+    /* ── APP CONTAINER ──────────────────────── */
     .app {
       width: 100%;
-      max-width: 430px;
-      padding: 28px 14px 48px;
+      padding: var(--app-pt) var(--app-px) clamp(40px,8vw,80px);
     }
+
+    /* Center + cap width on larger screens */
+    @media (min-width: 560px)  { .app { max-width: 600px;  margin: 0 auto; } }
+    @media (min-width: 768px)  { .app { max-width: 860px;  } }
+    @media (min-width: 1024px) { .app { max-width: 1060px; } }
 
     /* ── HEADER ─────────────────────────────── */
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 22px;
+      margin-bottom: clamp(18px, 4vw, 28px);
     }
 
     .loc {
       display: flex;
       align-items: center;
-      gap: 7px;
-      font-size: 10.5px;
+      gap: clamp(5px, 1.5vw, 9px);
+      font-size: var(--f-xs);
       font-weight: 500;
       letter-spacing: .1em;
       color: #888;
@@ -45,56 +73,55 @@
     }
 
     .loc-dot {
-      width: 8px; height: 8px;
+      width: var(--dot-sz); height: var(--dot-sz);
       border-radius: 50%;
       background: #4caf50;
       box-shadow: 0 0 0 2px rgba(76,175,80,.25);
+      flex-shrink: 0;
     }
 
     .avatar {
-      width: 40px; height: 40px;
+      width: var(--av-sz); height: var(--av-sz);
       border-radius: 50%;
       background: #c9a227;
       display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 17px; color: #fff;
+      font-weight: 700;
+      font-size: clamp(15px, 4vw, 20px);
+      color: #fff;
+      flex-shrink: 0;
     }
 
     /* ── GREETING ────────────────────────────── */
     .greeting {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: 36px;
+      font-size: clamp(28px, 8vw, 54px);
       font-weight: 700;
       line-height: 1.15;
-      margin-bottom: 22px;
+      margin-bottom: clamp(18px, 4vw, 30px);
       color: #f0ede6;
     }
 
-    .greeting .name {
-      font-style: italic;
-      color: #c9a227;
-    }
+    .greeting .name { font-style: italic; color: #c9a227; }
 
     /* ── SEARCH ─────────────────────────────── */
     .search {
       background: #1e1e1e;
       border: 1px solid #2a2a2a;
       border-radius: 50px;
-      padding: 13px 18px;
+      padding: clamp(11px, 2.8vw, 16px) clamp(14px, 3.5vw, 22px);
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 18px;
+      gap: clamp(8px, 2vw, 14px);
+      margin-bottom: clamp(14px, 3.5vw, 22px);
     }
 
-    .search svg { color: #666; flex-shrink: 0; }
+    .search svg { color: #666; flex-shrink: 0; width: clamp(14px,3.5vw,18px); height: clamp(14px,3.5vw,18px); }
 
     .search input {
       flex: 1;
-      background: none;
-      border: none;
-      outline: none;
+      background: none; border: none; outline: none;
       color: #999;
-      font-size: 14px;
+      font-size: clamp(12px, 3vw, 16px);
       font-family: 'Inter', sans-serif;
     }
 
@@ -103,7 +130,7 @@
     /* ── GRID ───────────────────────────────── */
     .grid {
       display: flex;
-      gap: 8px;
+      gap: var(--gap);
       align-items: flex-start;
     }
 
@@ -111,17 +138,18 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: var(--gap);
+      min-width: 0;
     }
 
     /* ── CARDS ──────────────────────────────── */
     .card {
-      border-radius: 20px;
-      padding: 13px 12px;
+      border-radius: var(--radius);
+      padding: var(--card-py) var(--card-px);
       position: relative;
       overflow: hidden;
       cursor: pointer;
-      transition: transform .15s ease, box-shadow .15s ease;
+      transition: transform .15s ease;
     }
 
     .card:hover  { transform: scale(.97); }
@@ -136,105 +164,87 @@
     .wine   { background: #3c1020; }
     .forest { background: #2b4530; }
 
+    /* ── FLUID FONT CLASSES ─────────────────── */
+    .f-giant { font-family:'Inter',sans-serif; font-weight:800; font-size:var(--f-giant); line-height:1; letter-spacing:-.02em; }
+    .f-aed   { font-family:'Inter',sans-serif; font-weight:800; font-size:var(--f-aed);   line-height:1; letter-spacing:-.02em; }
+    .f-xl    { font-family:'Playfair Display',serif; font-style:italic; font-weight:800; font-size:var(--f-xl); line-height:1.05; }
+    .f-xl-b  { font-family:'Playfair Display',serif; font-weight:900; font-size:var(--f-xl); line-height:1.05; }
+    .f-lg    { font-family:'Playfair Display',serif; font-style:italic; font-weight:800; font-size:var(--f-lg); line-height:1.05; }
+    .f-lg-b  { font-family:'Playfair Display',serif; font-weight:900; font-size:var(--f-lg); line-height:1.05; }
+    .f-md    { font-family:'Playfair Display',serif; font-style:italic; font-weight:800; font-size:var(--f-md); line-height:1.05; }
+    .f-base  { font-size:var(--f-base); font-weight:600; }
+    .f-sm    { font-size:var(--f-sm); }
+    .f-xs    { font-size:var(--f-xs); }
+
     /* ── UTILITY ELEMENTS ───────────────────── */
     .tag {
-      font-size: 8.5px;
+      font-size: var(--f-xs);
       font-weight: 600;
       letter-spacing: .13em;
       text-transform: uppercase;
       opacity: .65;
-      margin-bottom: 5px;
+      margin-bottom: clamp(3px,1vw,6px);
     }
 
-    .tag.dark-text { color: #1a1a1a; }
+    .tag.dt { color: #1a1a1a; }
 
     .row {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 4px;
+      margin-bottom: clamp(3px,1vw,5px);
     }
 
     .dot {
-      width: 7px; height: 7px;
+      width: var(--dot-sz); height: var(--dot-sz);
       border-radius: 50%;
       flex-shrink: 0;
+      margin-top: 2px;
     }
 
     .dot-red  { background: #e05040; }
     .dot-gold { background: #c9a227; }
 
-    .circle-btn {
-      width: 24px; height: 24px;
+    .cbtn {
+      width: var(--btn-sz); height: var(--btn-sz);
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 12px;
+      font-size: clamp(10px,2.5vw,14px);
       flex-shrink: 0;
     }
 
-    .cb-dark   { background: #111; color: #fff; }
-    .cb-gold   { background: #c9a227; color: #111; font-size: 11px; font-weight: 700; }
-    .cb-light  { background: rgba(255,255,255,.18); color: #fff; font-size: 11px; }
-    .cb-black  { background: rgba(0,0,0,.25); color: rgba(255,255,255,.8); font-size: 11px; }
+    .cb-dark  { background: #111; color: #fff; }
+    .cb-gold  { background: #c9a227; color: #111; font-weight: 700; }
+    .cb-light { background: rgba(255,255,255,.18); color: #fff; }
+    .cb-black { background: rgba(0,0,0,.25); color: rgba(255,255,255,.8); }
 
-    .serif-title {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-weight: 800;
-      line-height: 1.05;
-    }
-
-    .serif-bold {
-      font-family: 'Playfair Display', serif;
-      font-weight: 900;
-      line-height: 1.05;
-    }
-
-    .sub { font-size: 9.5px; opacity: .6; margin-top: 3px; }
+    .sub  { font-size: var(--f-xs); opacity: .6; margin-top: clamp(2px,.8vw,4px); }
     .meta {
-      font-size: 8.5px;
+      font-size: var(--f-xs);
       font-weight: 500;
       letter-spacing: .1em;
       text-transform: uppercase;
       opacity: .45;
-      margin-top: 6px;
+      margin-top: clamp(4px,1.2vw,8px);
     }
 
-    /* Available button */
-    .avail-btn {
+    /* Available / New Launch button */
+    .pill-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: clamp(4px,1.2vw,7px);
       background: #c9a227;
       color: #111;
       border-radius: 50px;
-      padding: 7px 11px;
-      font-size: 9px;
+      padding: clamp(5px,1.5vw,9px) clamp(8px,2.2vw,14px);
+      font-size: var(--f-xs);
       font-weight: 700;
       letter-spacing: .1em;
       text-transform: uppercase;
-      margin-top: 10px;
+      margin-top: clamp(8px,2vw,14px);
     }
 
-    .avail-btn .bd { width: 5px; height: 5px; border-radius: 50%; background: #111; }
-
-    /* New launch button */
-    .launch-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #c9a227;
-      color: #111;
-      border-radius: 50px;
-      padding: 7px 11px;
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      margin-top: 10px;
-    }
-
-    .launch-btn .bd { width: 5px; height: 5px; border-radius: 50%; background: #111; }
+    .pill-btn .bd { width: clamp(4px,1vw,6px); height: clamp(4px,1vw,6px); border-radius: 50%; background: #111; }
 
     /* Toggle pill */
     .toggle-pill {
@@ -243,14 +253,15 @@
       justify-content: space-between;
       background: rgba(0,0,0,.28);
       border-radius: 50px;
-      padding: 8px 10px;
-      margin-top: 10px;
+      padding: clamp(6px,1.8vw,10px) clamp(8px,2vw,12px);
+      margin-top: clamp(8px,2vw,12px);
     }
 
-    .toggle-pill span { font-size: 9.5px; font-weight: 500; color: rgba(255,255,255,.9); }
+    .toggle-pill span { font-size: var(--f-xs); font-weight: 500; color: rgba(255,255,255,.9); }
 
     .toggle {
-      width: 32px; height: 18px;
+      width: clamp(26px,6.5vw,38px);
+      height: clamp(15px,3.8vw,22px);
       border-radius: 50px;
       position: relative;
       flex-shrink: 0;
@@ -260,7 +271,8 @@
       content: '';
       position: absolute;
       right: 2px; top: 2px;
-      width: 14px; height: 14px;
+      width: clamp(11px,2.8vw,18px);
+      height: clamp(11px,2.8vw,18px);
       border-radius: 50%;
       background: #fff;
     }
@@ -272,39 +284,40 @@
     .data-row {
       display: flex;
       justify-content: space-between;
-      font-size: 9.5px;
-      margin-bottom: 2px;
+      font-size: var(--f-xs);
+      margin-bottom: clamp(1px,.5vw,3px);
     }
 
     .data-row .lbl { opacity: .6; }
     .data-row .val { font-weight: 600; }
 
-    /* Dot grid pattern */
+    /* Dot grid */
     .dot-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
-      margin: 8px 0 6px;
+      gap: clamp(3px,.8vw,5px);
+      margin: clamp(6px,1.8vw,10px) 0;
     }
 
-    .dg { width: 4px; height: 4px; border-radius: 50%; background: rgba(0,0,0,.18); }
+    .dg { aspect-ratio:1; border-radius: 50%; background: rgba(0,0,0,.18); }
     .dg.hi { background: #c05040; }
 
-    /* Arch (Etisalat logo) */
+    /* Arch (Etisalat) */
     .arch {
-      width: 48px; height: 56px;
-      border: 5px solid rgba(0,0,0,.2);
-      border-radius: 40px 40px 0 0;
-      margin: 8px auto 4px;
+      width: clamp(38px,10vw,64px);
+      height: clamp(44px,12vw,76px);
+      border: clamp(3px,.8vw,6px) solid rgba(0,0,0,.2);
+      border-radius: 100px 100px 0 0;
+      margin: clamp(6px,1.8vw,10px) auto clamp(2px,.6vw,4px);
     }
 
-    /* Watermark letter */
+    /* Watermark */
     .wm {
       position: absolute;
       bottom: -14px; right: -4px;
       font-family: 'Playfair Display', serif;
       font-weight: 900;
-      font-size: 84px;
+      font-size: clamp(60px, 18vw, 110px);
       opacity: .07;
       line-height: 1;
       pointer-events: none;
@@ -312,19 +325,22 @@
 
     /* Mini avatar */
     .mini-av {
-      width: 30px; height: 30px;
+      width: clamp(26px,6.5vw,38px);
+      height: clamp(26px,6.5vw,38px);
       border-radius: 50%;
       background: #2e2e2e;
       display: flex; align-items: center; justify-content: center;
-      font-weight: 600; font-size: 14px;
+      font-weight: 600;
+      font-size: clamp(12px,3vw,17px);
     }
 
     /* DEWA oval */
     .dewa-oval {
-      width: 40px; height: 27px;
+      width: clamp(32px,8.5vw,52px);
+      height: clamp(22px,5.5vw,34px);
       border-radius: 50%;
       background: #c0392b;
-      margin: 7px 0 4px;
+      margin: clamp(5px,1.5vw,9px) 0 clamp(3px,1vw,5px);
     }
 
     /* Express badge */
@@ -332,57 +348,57 @@
       display: inline-block;
       background: rgba(0,0,0,.3);
       border-radius: 50px;
-      padding: 5px 9px;
-      font-size: 9px;
+      padding: clamp(4px,1.2vw,7px) clamp(7px,1.8vw,12px);
+      font-size: var(--f-xs);
       font-weight: 600;
-      margin-top: 9px;
+      margin-top: clamp(6px,1.8vw,11px);
       color: rgba(255,255,255,.85);
     }
 
     /* Dial knob */
     .dial {
-      width: 42px; height: 42px;
+      width: clamp(34px,8.5vw,54px);
+      height: clamp(34px,8.5vw,54px);
       border-radius: 50%;
       background: radial-gradient(circle at 38% 32%, #4a4a4a, #1a1a1a);
       border: 2px solid #333;
-      margin: 8px auto 0;
+      margin: clamp(6px,1.8vw,10px) auto 0;
     }
 
-    /* AED Top-Up button */
+    /* Top-Up button */
     .topup-btn {
       display: flex;
       align-items: center;
       justify-content: space-between;
       background: rgba(0,0,0,.2);
       border-radius: 50px;
-      padding: 8px 13px;
-      margin-top: 10px;
-      font-size: 10.5px;
+      padding: clamp(6px,1.8vw,10px) clamp(10px,2.5vw,16px);
+      margin-top: clamp(8px,2vw,13px);
+      font-size: var(--f-sm);
       font-weight: 600;
       color: #1a1a1a;
     }
 
-    /* Large D for Damac */
-    .damac-bg-d {
-      position: absolute;
-      top: 6px; left: 10px;
-      font-family: 'Playfair Display', serif;
-      font-weight: 900;
-      font-size: 70px;
+    /* Damac background letters */
+    .damac-d {
+      position: absolute; top: 6px; left: 10px;
+      font-family: 'Playfair Display', serif; font-weight: 900;
+      font-size: clamp(50px, 14vw, 90px);
       color: rgba(255,255,255,.1);
-      line-height: 1;
+      line-height: 1; pointer-events: none;
+    }
+    .damac-i {
+      position: absolute; bottom: clamp(36px,9vw,54px); left: clamp(14px,3.5vw,22px);
+      font-family: 'Playfair Display', serif; font-style: italic; font-weight: 400;
+      font-size: clamp(22px,6vw,38px);
+      color: rgba(255,255,255,.06);
       pointer-events: none;
     }
 
-    .damac-bg-i {
-      position: absolute;
-      bottom: 46px; left: 20px;
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-weight: 400;
-      font-size: 30px;
-      color: rgba(255,255,255,.06);
-      pointer-events: none;
+    /* ── VERY SMALL PHONES (<340px) ─────────── */
+    @media (max-width: 339px) {
+      .grid { gap: 5px; }
+      .card { padding: 9px 8px; }
     }
   </style>
 </head>
@@ -405,11 +421,11 @@
 
   <!-- SEARCH -->
   <div class="search">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
       <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
     </svg>
     <input type="text" placeholder="Search or ask…">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
       <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
       <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
       <line x1="12" y1="19" x2="12" y2="23"/>
@@ -426,29 +442,29 @@
       <!-- Emirates NBD -->
       <div class="card navy">
         <div class="row">
-          <span style="font-size:9px;opacity:.45;letter-spacing:.06em;">01</span>
-          <div class="circle-btn cb-gold">✓</div>
+          <span class="f-xs" style="opacity:.45;letter-spacing:.06em;">01</span>
+          <div class="cbtn cb-gold">✓</div>
         </div>
-        <div class="serif-title" style="font-size:22px;margin-top:4px;color:#f0ede6;">Emirates<br>NBD</div>
+        <div class="f-xl" style="margin-top:4px;color:#f0ede6;">Emirates<br>NBD</div>
         <div class="meta">Banking · &lt;1 Min</div>
-        <div class="avail-btn"><span class="bd"></span>Available<span>→</span></div>
+        <div class="pill-btn"><span class="bd"></span>Available<span>→</span></div>
       </div>
 
       <!-- RTA Dubai -->
       <div class="card dark">
         <div class="row">
-          <span style="font-size:8.5px;opacity:.4;letter-spacing:.08em;text-transform:uppercase;">VRFD · 24</span>
+          <span class="f-xs" style="opacity:.4;letter-spacing:.08em;text-transform:uppercase;">VRFD · 24</span>
           <div class="dot dot-gold"></div>
         </div>
         <div class="mini-av" style="margin-top:4px;">R</div>
-        <div style="font-size:12.5px;font-weight:600;margin-top:6px;">RTA Dubai</div>
+        <div class="f-base" style="margin-top:6px;">RTA Dubai</div>
         <div class="meta">2 Min</div>
       </div>
 
       <!-- ADCB -->
       <div class="card wine">
         <div class="row">
-          <span style="font-size:8.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.85;">ADCB</span>
+          <span class="f-xs" style="font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.85;">ADCB</span>
           <div class="dot dot-red"></div>
         </div>
         <div style="margin-top:6px;">
@@ -460,17 +476,17 @@
 
       <!-- Banking -->
       <div class="card wine">
-        <div class="serif-title" style="font-size:22px;color:#f0ede6;">Banking</div>
-        <div style="display:flex;justify-content:flex-end;margin-top:10px;">
-          <div class="circle-btn cb-dark" style="width:28px;height:28px;">→</div>
+        <div class="f-xl" style="color:#f0ede6;">Banking</div>
+        <div style="display:flex;justify-content:flex-end;margin-top:clamp(8px,2vw,12px);">
+          <div class="cbtn cb-dark">→</div>
         </div>
       </div>
 
       <!-- Carrefour -->
       <div class="card cream">
         <div class="row">
-          <div class="tag dark-text">Retail</div>
-          <div class="circle-btn cb-dark">→</div>
+          <div class="tag dt">Retail</div>
+          <div class="cbtn cb-dark">→</div>
         </div>
         <div class="dot-grid">
           <div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div>
@@ -478,7 +494,7 @@
           <div class="dg"></div><div class="dg hi"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div>
           <div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg hi"></div><div class="dg"></div><div class="dg"></div>
         </div>
-        <div class="serif-title" style="font-size:16px;color:#1a1a1a;">Carrefour</div>
+        <div class="f-md" style="color:#1a1a1a;">Carrefour</div>
         <div class="meta" style="color:#1a1a1a;">2 Min</div>
       </div>
 
@@ -488,9 +504,9 @@
           <div class="tag">Developer</div>
           <div class="dot dot-red"></div>
         </div>
-        <div class="serif-bold" style="font-size:19px;color:#f0ede6;margin-top:2px;line-height:1.1;">Emaar<br>Props.</div>
+        <div class="f-lg-b" style="color:#f0ede6;margin-top:2px;line-height:1.1;">Emaar<br>Props.</div>
         <div class="meta">Real Estate</div>
-        <div class="launch-btn"><span class="bd"></span>New Launch</div>
+        <div class="pill-btn"><span class="bd"></span>New Launch</div>
       </div>
 
       <!-- Aramex -->
@@ -499,7 +515,7 @@
           <div class="tag">Courier</div>
           <div class="dot dot-red"></div>
         </div>
-        <div class="serif-bold" style="font-size:18px;color:#f0ede6;margin-top:2px;">Aramex</div>
+        <div class="f-lg-b" style="color:#f0ede6;margin-top:2px;">Aramex</div>
         <div class="sub">Out for delivery</div>
       </div>
 
@@ -511,18 +527,18 @@
       <!-- Aster Clinic -->
       <div class="card cream">
         <div class="row">
-          <div class="tag dark-text">Next Slot</div>
+          <div class="tag dt">Next Slot</div>
           <div class="dot dot-red"></div>
         </div>
-        <div style="font-family:'Inter',sans-serif;font-weight:800;font-size:38px;color:#1a1a1a;line-height:1;letter-spacing:-.02em;margin:2px 0;">2m</div>
-        <div style="font-size:11px;font-weight:500;color:#333;">Aster Clinic</div>
+        <div class="f-giant" style="color:#1a1a1a;margin:2px 0;">2m</div>
+        <div class="f-sm" style="font-weight:500;color:#333;">Aster Clinic</div>
       </div>
 
       <!-- Etisalat -->
       <div class="card gold">
         <div class="row">
-          <div class="serif-title" style="font-size:18px;color:#1a1a1a;">Etisalat</div>
-          <div class="circle-btn cb-black">✓</div>
+          <div class="f-lg" style="color:#1a1a1a;">Etisalat</div>
+          <div class="cbtn cb-black">✓</div>
         </div>
         <div class="arch"></div>
         <div class="toggle-pill">
@@ -534,21 +550,21 @@
       <!-- Meraas -->
       <div class="card cream" style="position:relative;">
         <div class="row">
-          <div class="tag dark-text">Real Estate</div>
+          <div class="tag dt">Real Estate</div>
           <div class="dot dot-red"></div>
         </div>
-        <div class="serif-title" style="font-size:18px;color:#1a1a1a;">Meraas</div>
+        <div class="f-lg" style="color:#1a1a1a;">Meraas</div>
         <div class="meta" style="color:#1a1a1a;">5 Min</div>
         <div class="wm" style="color:#1a1a1a;">M</div>
       </div>
 
       <!-- Damac Properties -->
-      <div class="card navy" style="min-height:130px;position:relative;">
-        <div class="damac-bg-d">D</div>
-        <div class="damac-bg-i">I</div>
+      <div class="card navy" style="min-height:clamp(110px,28vw,160px);position:relative;">
+        <div class="damac-d">D</div>
+        <div class="damac-i">I</div>
         <div class="dot dot-gold" style="position:absolute;top:13px;right:13px;"></div>
         <div style="position:absolute;bottom:13px;left:13px;">
-          <div style="font-size:12px;font-weight:600;color:#f0ede6;line-height:1.3;">Damac<br>Properties</div>
+          <div class="f-base" style="color:#f0ede6;line-height:1.3;">Damac<br>Properties</div>
           <div class="meta">Real Estate</div>
         </div>
       </div>
@@ -557,25 +573,25 @@
       <div class="card forest">
         <div class="row">
           <div class="tag">Grocery</div>
-          <div class="circle-btn cb-light">→</div>
+          <div class="cbtn cb-light">→</div>
         </div>
-        <div class="serif-title" style="font-size:18px;color:#f0ede6;margin-top:2px;">Spinneys</div>
+        <div class="f-lg" style="color:#f0ede6;margin-top:2px;">Spinneys</div>
         <div class="sub">Fresh · 4 min</div>
       </div>
 
       <!-- Salik -->
       <div class="card gold">
         <div class="row">
-          <div class="tag dark-text">Toll</div>
-          <div class="circle-btn cb-black">✓</div>
+          <div class="tag dt">Toll</div>
+          <div class="cbtn cb-black">✓</div>
         </div>
-        <div class="serif-title" style="font-size:24px;color:#1a1a1a;margin-top:2px;">Salik</div>
-        <div style="font-size:9.5px;color:rgba(0,0,0,.55);margin-top:3px;">Road Toll · Dubai</div>
+        <div class="f-xl" style="color:#1a1a1a;margin-top:2px;">Salik</div>
+        <div class="f-xs" style="color:rgba(0,0,0,.55);margin-top:3px;">Road Toll · Dubai</div>
       </div>
 
       <!-- AED 48 Top Up -->
       <div class="card gold">
-        <div style="font-family:'Inter',sans-serif;font-weight:800;font-size:30px;color:#1a1a1a;line-height:1;letter-spacing:-.02em;">AED<br>48</div>
+        <div class="f-aed" style="color:#1a1a1a;">AED<br>48</div>
         <div class="topup-btn">
           <span>Top Up</span>
           <span>→</span>
@@ -591,20 +607,20 @@
       <div class="card coral">
         <div class="row">
           <div class="tag">Food</div>
-          <div class="circle-btn cb-dark">→</div>
+          <div class="cbtn cb-dark">→</div>
         </div>
-        <div class="serif-title" style="font-size:21px;color:#f0ede6;margin-top:2px;">Talabat</div>
+        <div class="f-xl" style="color:#f0ede6;margin-top:2px;">Talabat</div>
         <div class="sub">Talabat · &lt;1 min</div>
       </div>
 
       <!-- DEWA -->
       <div class="card cream">
         <div class="row">
-          <div class="tag dark-text">Utilities</div>
+          <div class="tag dt">Utilities</div>
           <div class="dot dot-red"></div>
         </div>
         <div class="dewa-oval"></div>
-        <div style="font-size:11px;font-weight:700;color:#222;">DEWA</div>
+        <div class="f-sm" style="font-weight:700;color:#222;">DEWA</div>
         <div class="meta" style="color:#1a1a1a;">&lt;1 Min Wait</div>
       </div>
 
@@ -612,9 +628,9 @@
       <div class="card coral">
         <div class="row">
           <div class="tag">E-Commerce</div>
-          <div class="circle-btn cb-dark">→</div>
+          <div class="cbtn cb-dark">→</div>
         </div>
-        <div class="serif-title" style="font-size:23px;color:#f0ede6;margin-top:2px;">Noon</div>
+        <div class="f-xl" style="color:#f0ede6;margin-top:2px;">Noon</div>
         <div class="sub">noon.com · UAE</div>
         <div class="express">Express · 2 hr</div>
       </div>
@@ -622,19 +638,19 @@
       <!-- LuLu -->
       <div class="card cream">
         <div class="row">
-          <div class="tag dark-text">Retail</div>
-          <div class="circle-btn cb-dark">→</div>
+          <div class="tag dt">Retail</div>
+          <div class="cbtn cb-dark">→</div>
         </div>
-        <div class="serif-title" style="font-size:19px;color:#1a1a1a;margin-top:2px;">LuLu</div>
-        <div style="font-size:10.5px;color:#444;margin-top:2px;">Hypermarket</div>
+        <div class="f-lg" style="color:#1a1a1a;margin-top:2px;">LuLu</div>
+        <div class="f-xs" style="color:#444;margin-top:2px;">Hypermarket</div>
         <div class="meta" style="color:#1a1a1a;">3 Min</div>
       </div>
 
       <!-- du -->
       <div class="card dark">
         <div class="row">
-          <div class="serif-title" style="font-size:18px;color:#f0ede6;">du</div>
-          <div class="circle-btn cb-gold">✓</div>
+          <div class="f-lg" style="color:#f0ede6;">du</div>
+          <div class="cbtn cb-gold">✓</div>
         </div>
         <div class="dial"></div>
       </div>
@@ -642,7 +658,7 @@
       <!-- Mobile (du telecom) -->
       <div class="card dark">
         <div class="tag">Telecom</div>
-        <div style="font-size:11.5px;font-weight:500;margin-top:4px;">Mobile · 2 min</div>
+        <div class="f-sm" style="font-weight:500;margin-top:4px;">Mobile · 2 min</div>
         <div style="display:flex;justify-content:flex-end;margin-top:8px;">
           <div class="toggle t-purple"></div>
         </div>
@@ -651,10 +667,10 @@
       <!-- Fetchr -->
       <div class="card cream">
         <div class="row">
-          <div class="tag dark-text">Delivery</div>
+          <div class="tag dt">Delivery</div>
           <div class="dot dot-gold"></div>
         </div>
-        <div class="serif-title" style="font-size:18px;color:#1a1a1a;margin-top:2px;">Fetchr</div>
+        <div class="f-lg" style="color:#1a1a1a;margin-top:2px;">Fetchr</div>
         <div class="sub" style="color:#555;">1 parcel · Today</div>
       </div>
 
@@ -662,9 +678,9 @@
       <div class="card coral">
         <div class="row">
           <div class="tag">Food</div>
-          <div class="circle-btn cb-dark">→</div>
+          <div class="cbtn cb-dark">→</div>
         </div>
-        <div class="serif-title" style="font-size:21px;color:#f0ede6;margin-top:2px;">Zomato</div>
+        <div class="f-xl" style="color:#f0ede6;margin-top:2px;">Zomato</div>
         <div class="sub">&lt;30 min</div>
       </div>
 
@@ -676,17 +692,14 @@
 <script>
   (function () {
     const now = new Date();
-
-    // Greeting
     const h = now.getHours();
     const greet = h < 12 ? 'Good morning, ' : h < 17 ? 'Good afternoon, ' : 'Good evening, ';
     document.getElementById('greeting-text').textContent = greet;
 
-    // Date
     const days   = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
     const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-    const dateStr = `DUBAI · ${days[now.getDay()]} ${now.getDate()} ${months[now.getMonth()]}`;
-    document.getElementById('loc-text').textContent = dateStr;
+    document.getElementById('loc-text').textContent =
+      `DUBAI · ${days[now.getDay()]} ${now.getDate()} ${months[now.getMonth()]}`;
   })();
 </script>
 </body>
