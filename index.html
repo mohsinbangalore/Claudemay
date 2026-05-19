@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sara · Dubai</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,400;1,600;1,700;1,800;1,900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #111;
+      color: #f0ede6;
+      font-family: 'Inter', -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 430px;
+      padding: 28px 14px 48px;
+    }
+
+    /* ── HEADER ─────────────────────────────── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .loc {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: .1em;
+      color: #888;
+      text-transform: uppercase;
+    }
+
+    .loc-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #4caf50;
+      box-shadow: 0 0 0 2px rgba(76,175,80,.25);
+    }
+
+    .avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: #c9a227;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 17px; color: #fff;
+    }
+
+    /* ── GREETING ────────────────────────────── */
+    .greeting {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 22px;
+      color: #f0ede6;
+    }
+
+    .greeting .name {
+      font-style: italic;
+      color: #c9a227;
+    }
+
+    /* ── SEARCH ─────────────────────────────── */
+    .search {
+      background: #1e1e1e;
+      border: 1px solid #2a2a2a;
+      border-radius: 50px;
+      padding: 13px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .search svg { color: #666; flex-shrink: 0; }
+
+    .search input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      color: #999;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .search input::placeholder { color: #555; }
+
+    /* ── GRID ───────────────────────────────── */
+    .grid {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* ── CARDS ──────────────────────────────── */
+    .card {
+      border-radius: 20px;
+      padding: 13px 12px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .card:hover  { transform: scale(.97); }
+    .card:active { transform: scale(.95); }
+
+    /* Color variants */
+    .navy   { background: #1b2d52; }
+    .coral  { background: #bf4e3a; }
+    .gold   { background: #c9a227; }
+    .cream  { background: #e8dfcc; color: #1a1a1a; }
+    .dark   { background: #1c1c1c; }
+    .wine   { background: #3c1020; }
+    .forest { background: #2b4530; }
+
+    /* ── UTILITY ELEMENTS ───────────────────── */
+    .tag {
+      font-size: 8.5px;
+      font-weight: 600;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      opacity: .65;
+      margin-bottom: 5px;
+    }
+
+    .tag.dark-text { color: #1a1a1a; }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+
+    .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dot-red  { background: #e05040; }
+    .dot-gold { background: #c9a227; }
+
+    .circle-btn {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    .cb-dark   { background: #111; color: #fff; }
+    .cb-gold   { background: #c9a227; color: #111; font-size: 11px; font-weight: 700; }
+    .cb-light  { background: rgba(255,255,255,.18); color: #fff; font-size: 11px; }
+    .cb-black  { background: rgba(0,0,0,.25); color: rgba(255,255,255,.8); font-size: 11px; }
+
+    .serif-title {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 800;
+      line-height: 1.05;
+    }
+
+    .serif-bold {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      line-height: 1.05;
+    }
+
+    .sub { font-size: 9.5px; opacity: .6; margin-top: 3px; }
+    .meta {
+      font-size: 8.5px;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      opacity: .45;
+      margin-top: 6px;
+    }
+
+    /* Available button */
+    .avail-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #c9a227;
+      color: #111;
+      border-radius: 50px;
+      padding: 7px 11px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-top: 10px;
+    }
+
+    .avail-btn .bd { width: 5px; height: 5px; border-radius: 50%; background: #111; }
+
+    /* New launch button */
+    .launch-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #c9a227;
+      color: #111;
+      border-radius: 50px;
+      padding: 7px 11px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-top: 10px;
+    }
+
+    .launch-btn .bd { width: 5px; height: 5px; border-radius: 50%; background: #111; }
+
+    /* Toggle pill */
+    .toggle-pill {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0,0,0,.28);
+      border-radius: 50px;
+      padding: 8px 10px;
+      margin-top: 10px;
+    }
+
+    .toggle-pill span { font-size: 9.5px; font-weight: 500; color: rgba(255,255,255,.9); }
+
+    .toggle {
+      width: 32px; height: 18px;
+      border-radius: 50px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .toggle::after {
+      content: '';
+      position: absolute;
+      right: 2px; top: 2px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .t-blue   { background: #007aff; }
+    .t-purple { background: #9b59b6; }
+
+    /* Data rows */
+    .data-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9.5px;
+      margin-bottom: 2px;
+    }
+
+    .data-row .lbl { opacity: .6; }
+    .data-row .val { font-weight: 600; }
+
+    /* Dot grid pattern */
+    .dot-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      margin: 8px 0 6px;
+    }
+
+    .dg { width: 4px; height: 4px; border-radius: 50%; background: rgba(0,0,0,.18); }
+    .dg.hi { background: #c05040; }
+
+    /* Arch (Etisalat logo) */
+    .arch {
+      width: 48px; height: 56px;
+      border: 5px solid rgba(0,0,0,.2);
+      border-radius: 40px 40px 0 0;
+      margin: 8px auto 4px;
+    }
+
+    /* Watermark letter */
+    .wm {
+      position: absolute;
+      bottom: -14px; right: -4px;
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 84px;
+      opacity: .07;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    /* Mini avatar */
+    .mini-av {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: #2e2e2e;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 600; font-size: 14px;
+    }
+
+    /* DEWA oval */
+    .dewa-oval {
+      width: 40px; height: 27px;
+      border-radius: 50%;
+      background: #c0392b;
+      margin: 7px 0 4px;
+    }
+
+    /* Express badge */
+    .express {
+      display: inline-block;
+      background: rgba(0,0,0,.3);
+      border-radius: 50px;
+      padding: 5px 9px;
+      font-size: 9px;
+      font-weight: 600;
+      margin-top: 9px;
+      color: rgba(255,255,255,.85);
+    }
+
+    /* Dial knob */
+    .dial {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 32%, #4a4a4a, #1a1a1a);
+      border: 2px solid #333;
+      margin: 8px auto 0;
+    }
+
+    /* AED Top-Up button */
+    .topup-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0,0,0,.2);
+      border-radius: 50px;
+      padding: 8px 13px;
+      margin-top: 10px;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    /* Large D for Damac */
+    .damac-bg-d {
+      position: absolute;
+      top: 6px; left: 10px;
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 70px;
+      color: rgba(255,255,255,.1);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .damac-bg-i {
+      position: absolute;
+      bottom: 46px; left: 20px;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 30px;
+      color: rgba(255,255,255,.06);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="loc">
+      <div class="loc-dot"></div>
+      <span id="loc-text">DUBAI · TUE 22 APR</span>
+    </div>
+    <div class="avatar">S</div>
+  </header>
+
+  <!-- GREETING -->
+  <h1 class="greeting">
+    <span id="greeting-text">Good evening, </span><span class="name">Sara.</span>
+  </h1>
+
+  <!-- SEARCH -->
+  <div class="search">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input type="text" placeholder="Search or ask…">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+      <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+      <line x1="12" y1="19" x2="12" y2="23"/>
+      <line x1="8" y1="23" x2="16" y2="23"/>
+    </svg>
+  </div>
+
+  <!-- CARD GRID -->
+  <div class="grid">
+
+    <!-- ════ COLUMN 1 ════ -->
+    <div class="col">
+
+      <!-- Emirates NBD -->
+      <div class="card navy">
+        <div class="row">
+          <span style="font-size:9px;opacity:.45;letter-spacing:.06em;">01</span>
+          <div class="circle-btn cb-gold">✓</div>
+        </div>
+        <div class="serif-title" style="font-size:22px;margin-top:4px;color:#f0ede6;">Emirates<br>NBD</div>
+        <div class="meta">Banking · &lt;1 Min</div>
+        <div class="avail-btn"><span class="bd"></span>Available<span>→</span></div>
+      </div>
+
+      <!-- RTA Dubai -->
+      <div class="card dark">
+        <div class="row">
+          <span style="font-size:8.5px;opacity:.4;letter-spacing:.08em;text-transform:uppercase;">VRFD · 24</span>
+          <div class="dot dot-gold"></div>
+        </div>
+        <div class="mini-av" style="margin-top:4px;">R</div>
+        <div style="font-size:12.5px;font-weight:600;margin-top:6px;">RTA Dubai</div>
+        <div class="meta">2 Min</div>
+      </div>
+
+      <!-- ADCB -->
+      <div class="card wine">
+        <div class="row">
+          <span style="font-size:8.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.85;">ADCB</span>
+          <div class="dot dot-red"></div>
+        </div>
+        <div style="margin-top:6px;">
+          <div class="data-row"><span class="lbl">Statement</span><span class="val">Apr</span></div>
+          <div class="data-row"><span class="lbl">Min. due</span><span class="val">350</span></div>
+          <div class="data-row"><span class="lbl">Available</span><span class="val">12.4k</span></div>
+        </div>
+      </div>
+
+      <!-- Banking -->
+      <div class="card wine">
+        <div class="serif-title" style="font-size:22px;color:#f0ede6;">Banking</div>
+        <div style="display:flex;justify-content:flex-end;margin-top:10px;">
+          <div class="circle-btn cb-dark" style="width:28px;height:28px;">→</div>
+        </div>
+      </div>
+
+      <!-- Carrefour -->
+      <div class="card cream">
+        <div class="row">
+          <div class="tag dark-text">Retail</div>
+          <div class="circle-btn cb-dark">→</div>
+        </div>
+        <div class="dot-grid">
+          <div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div>
+          <div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div>
+          <div class="dg"></div><div class="dg hi"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div>
+          <div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg"></div><div class="dg hi"></div><div class="dg"></div><div class="dg"></div>
+        </div>
+        <div class="serif-title" style="font-size:16px;color:#1a1a1a;">Carrefour</div>
+        <div class="meta" style="color:#1a1a1a;">2 Min</div>
+      </div>
+
+      <!-- Emaar Props -->
+      <div class="card navy">
+        <div class="row">
+          <div class="tag">Developer</div>
+          <div class="dot dot-red"></div>
+        </div>
+        <div class="serif-bold" style="font-size:19px;color:#f0ede6;margin-top:2px;line-height:1.1;">Emaar<br>Props.</div>
+        <div class="meta">Real Estate</div>
+        <div class="launch-btn"><span class="bd"></span>New Launch</div>
+      </div>
+
+      <!-- Aramex -->
+      <div class="card dark">
+        <div class="row">
+          <div class="tag">Courier</div>
+          <div class="dot dot-red"></div>
+        </div>
+        <div class="serif-bold" style="font-size:18px;color:#f0ede6;margin-top:2px;">Aramex</div>
+        <div class="sub">Out for delivery</div>
+      </div>
+
+    </div><!-- /col1 -->
+
+    <!-- ════ COLUMN 2 ════ -->
+    <div class="col">
+
+      <!-- Aster Clinic -->
+      <div class="card cream">
+        <div class="row">
+          <div class="tag dark-text">Next Slot</div>
+          <div class="dot dot-red"></div>
+        </div>
+        <div style="font-family:'Inter',sans-serif;font-weight:800;font-size:38px;color:#1a1a1a;line-height:1;letter-spacing:-.02em;margin:2px 0;">2m</div>
+        <div style="font-size:11px;font-weight:500;color:#333;">Aster Clinic</div>
+      </div>
+
+      <!-- Etisalat -->
+      <div class="card gold">
+        <div class="row">
+          <div class="serif-title" style="font-size:18px;color:#1a1a1a;">Etisalat</div>
+          <div class="circle-btn cb-black">✓</div>
+        </div>
+        <div class="arch"></div>
+        <div class="toggle-pill">
+          <span>Telecom · 3 min</span>
+          <div class="toggle t-blue"></div>
+        </div>
+      </div>
+
+      <!-- Meraas -->
+      <div class="card cream" style="position:relative;">
+        <div class="row">
+          <div class="tag dark-text">Real Estate</div>
+          <div class="dot dot-red"></div>
+        </div>
+        <div class="serif-title" style="font-size:18px;color:#1a1a1a;">Meraas</div>
+        <div class="meta" style="color:#1a1a1a;">5 Min</div>
+        <div class="wm" style="color:#1a1a1a;">M</div>
+      </div>
+
+      <!-- Damac Properties -->
+      <div class="card navy" style="min-height:130px;position:relative;">
+        <div class="damac-bg-d">D</div>
+        <div class="damac-bg-i">I</div>
+        <div class="dot dot-gold" style="position:absolute;top:13px;right:13px;"></div>
+        <div style="position:absolute;bottom:13px;left:13px;">
+          <div style="font-size:12px;font-weight:600;color:#f0ede6;line-height:1.3;">Damac<br>Properties</div>
+          <div class="meta">Real Estate</div>
+        </div>
+      </div>
+
+      <!-- Spinneys -->
+      <div class="card forest">
+        <div class="row">
+          <div class="tag">Grocery</div>
+          <div class="circle-btn cb-light">→</div>
+        </div>
+        <div class="serif-title" style="font-size:18px;color:#f0ede6;margin-top:2px;">Spinneys</div>
+        <div class="sub">Fresh · 4 min</div>
+      </div>
+
+      <!-- Salik -->
+      <div class="card gold">
+        <div class="row">
+          <div class="tag dark-text">Toll</div>
+          <div class="circle-btn cb-black">✓</div>
+        </div>
+        <div class="serif-title" style="font-size:24px;color:#1a1a1a;margin-top:2px;">Salik</div>
+        <div style="font-size:9.5px;color:rgba(0,0,0,.55);margin-top:3px;">Road Toll · Dubai</div>
+      </div>
+
+      <!-- AED 48 Top Up -->
+      <div class="card gold">
+        <div style="font-family:'Inter',sans-serif;font-weight:800;font-size:30px;color:#1a1a1a;line-height:1;letter-spacing:-.02em;">AED<br>48</div>
+        <div class="topup-btn">
+          <span>Top Up</span>
+          <span>→</span>
+        </div>
+      </div>
+
+    </div><!-- /col2 -->
+
+    <!-- ════ COLUMN 3 ════ -->
+    <div class="col">
+
+      <!-- Talabat -->
+      <div class="card coral">
+        <div class="row">
+          <div class="tag">Food</div>
+          <div class="circle-btn cb-dark">→</div>
+        </div>
+        <div class="serif-title" style="font-size:21px;color:#f0ede6;margin-top:2px;">Talabat</div>
+        <div class="sub">Talabat · &lt;1 min</div>
+      </div>
+
+      <!-- DEWA -->
+      <div class="card cream">
+        <div class="row">
+          <div class="tag dark-text">Utilities</div>
+          <div class="dot dot-red"></div>
+        </div>
+        <div class="dewa-oval"></div>
+        <div style="font-size:11px;font-weight:700;color:#222;">DEWA</div>
+        <div class="meta" style="color:#1a1a1a;">&lt;1 Min Wait</div>
+      </div>
+
+      <!-- Noon -->
+      <div class="card coral">
+        <div class="row">
+          <div class="tag">E-Commerce</div>
+          <div class="circle-btn cb-dark">→</div>
+        </div>
+        <div class="serif-title" style="font-size:23px;color:#f0ede6;margin-top:2px;">Noon</div>
+        <div class="sub">noon.com · UAE</div>
+        <div class="express">Express · 2 hr</div>
+      </div>
+
+      <!-- LuLu -->
+      <div class="card cream">
+        <div class="row">
+          <div class="tag dark-text">Retail</div>
+          <div class="circle-btn cb-dark">→</div>
+        </div>
+        <div class="serif-title" style="font-size:19px;color:#1a1a1a;margin-top:2px;">LuLu</div>
+        <div style="font-size:10.5px;color:#444;margin-top:2px;">Hypermarket</div>
+        <div class="meta" style="color:#1a1a1a;">3 Min</div>
+      </div>
+
+      <!-- du -->
+      <div class="card dark">
+        <div class="row">
+          <div class="serif-title" style="font-size:18px;color:#f0ede6;">du</div>
+          <div class="circle-btn cb-gold">✓</div>
+        </div>
+        <div class="dial"></div>
+      </div>
+
+      <!-- Mobile (du telecom) -->
+      <div class="card dark">
+        <div class="tag">Telecom</div>
+        <div style="font-size:11.5px;font-weight:500;margin-top:4px;">Mobile · 2 min</div>
+        <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+          <div class="toggle t-purple"></div>
+        </div>
+      </div>
+
+      <!-- Fetchr -->
+      <div class="card cream">
+        <div class="row">
+          <div class="tag dark-text">Delivery</div>
+          <div class="dot dot-gold"></div>
+        </div>
+        <div class="serif-title" style="font-size:18px;color:#1a1a1a;margin-top:2px;">Fetchr</div>
+        <div class="sub" style="color:#555;">1 parcel · Today</div>
+      </div>
+
+      <!-- Zomato -->
+      <div class="card coral">
+        <div class="row">
+          <div class="tag">Food</div>
+          <div class="circle-btn cb-dark">→</div>
+        </div>
+        <div class="serif-title" style="font-size:21px;color:#f0ede6;margin-top:2px;">Zomato</div>
+        <div class="sub">&lt;30 min</div>
+      </div>
+
+    </div><!-- /col3 -->
+
+  </div><!-- /grid -->
+</div><!-- /app -->
+
+<script>
+  (function () {
+    const now = new Date();
+
+    // Greeting
+    const h = now.getHours();
+    const greet = h < 12 ? 'Good morning, ' : h < 17 ? 'Good afternoon, ' : 'Good evening, ';
+    document.getElementById('greeting-text').textContent = greet;
+
+    // Date
+    const days   = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+    const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    const dateStr = `DUBAI · ${days[now.getDay()]} ${now.getDate()} ${months[now.getMonth()]}`;
+    document.getElementById('loc-text').textContent = dateStr;
+  })();
+</script>
+</body>
+</html>
