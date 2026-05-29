@@ -610,6 +610,7 @@ const BIZ = {
 
 /* ── NAVIGATION ───────────────────────────────── */
 function openBiz(id) {
+  if (id === 'aster') { window.location.href = 'aster/index.html'; return; }
   const b = BIZ[id] || {
     name:id, bg:'#1c1c1c', fg:'#f0ede6', cat:'Service', av:id.slice(0,2).toUpperCase(),
     line:'Your trusted service partner in Dubai',
