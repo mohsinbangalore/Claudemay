@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HotPack · Ainager Calling</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700;1,800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg-2: #111111;
+    --card: #1a1a1a;
+    --card-2: #202020;
+    --line: rgba(255,255,255,0.08);
+    --line-strong: rgba(255,255,255,0.14);
+    --gold: #c9a84c;
+    --gold-bright: #ecd185;
+    --gold-soft: rgba(201,168,76,0.14);
+    --gold-line: rgba(201,168,76,0.42);
+    --ink: #f3efe6;
+    --ink-2: #b7b2a6;
+    --ink-3: #7d786d;
+    --green: #5fbf7a;
+    --amber: #d9a441;
+    --red: #cd6b6b;
+    --navy: #243044;
+    --r-card: 20px;
+    --r-sm: 13px;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'Space Grotesk', -apple-system, system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #050505;
+    font-family: var(--sans);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  #stage {
+    width: 100vw; height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .hp-scroll::-webkit-scrollbar { width: 0; height: 0; }
+  .hp-scroll { scrollbar-width: none; }
+
+  .hp-label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold);
+  }
+
+  .hp-dot { position: relative; border-radius: 50%; flex-shrink: 0; }
+  .hp-dot.pulse::after {
+    content: ''; position: absolute; inset: 0; border-radius: 50%;
+    background: inherit; animation: hp-pulse 2.2s ease-out infinite;
+  }
+  @keyframes hp-pulse {
+    0% { transform: scale(1); opacity: 0.55; }
+    70%,100% { transform: scale(3.2); opacity: 0; }
+  }
+
+  .hp-tile {
+    transition: transform 140ms cubic-bezier(0.34,1.4,0.6,1),
+                border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+    will-change: transform;
+  }
+  .hp-tile:active { transform: scale(0.97); }
+  .hp-tile.flash {
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 1px var(--gold), 0 10px 30px rgba(201,168,76,0.16);
+    background: linear-gradient(180deg, var(--gold-soft), var(--card)) !important;
+  }
+
+  /* Screen transitions — transform-only so content is always visible */
+  @keyframes hp-screen-in {
+    from { transform: translateX(26px); }
+    to   { transform: translateX(0); }
+  }
+  @keyframes hp-screen-in-back {
+    from { transform: translateX(-26px); }
+    to   { transform: translateX(0); }
+  }
+  .anim-ready .hp-screen { animation: hp-screen-in 320ms cubic-bezier(0.22,0.9,0.3,1) both; }
+  .anim-ready .hp-screen.back { animation: hp-screen-in-back 320ms cubic-bezier(0.22,0.9,0.3,1) both; }
+
+  /* Staggered tile entrance — transform-only */
+  @keyframes hp-rise {
+    from { transform: translateY(14px); }
+    to   { transform: translateY(0); }
+  }
+  .anim-ready .hp-rise { animation: hp-rise 420ms cubic-bezier(0.22,0.9,0.3,1) both; }
+
+  /* Chat bubbles */
+  @keyframes hp-msg-in {
+    from { transform: translateY(10px) scale(0.99); }
+    to   { transform: translateY(0) scale(1); }
+  }
+  .anim-ready .hp-msg { animation: hp-msg-in 360ms cubic-bezier(0.22,0.9,0.3,1) both; }
+
+  @keyframes hp-typing {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.35; }
+    30% { transform: translateY(-4px); opacity: 1; }
+  }
+
+  /* Chip tray — spring treatment (transform-only) */
+  @keyframes hp-chip-spring {
+    0%   { transform: translateY(26px) scale(0.9); }
+    60%  { transform: translateY(-4px) scale(1.03); }
+    80%  { transform: translateY(1px) scale(0.995); }
+    100% { transform: translateY(0) scale(1); }
+  }
+  /* Glide treatment */
+  @keyframes hp-chip-glide {
+    from { transform: translateX(28px); }
+    to   { transform: translateX(0); }
+  }
+  /* Pop treatment */
+  @keyframes hp-chip-pop {
+    0%   { transform: scale(0.55); }
+    65%  { transform: scale(1.06); }
+    100% { transform: scale(1); }
+  }
+  .anim-ready .chip-spring { animation: hp-chip-spring 520ms cubic-bezier(0.34,1.56,0.64,1) both; }
+  .anim-ready .chip-glide  { animation: hp-chip-glide 300ms cubic-bezier(0.22,0.9,0.3,1) both; }
+  .anim-ready .chip-pop    { animation: hp-chip-pop 460ms cubic-bezier(0.34,1.7,0.5,1) both; }
+
+  /* Chip tap fill */
+  .hp-chip { transition: transform 130ms cubic-bezier(0.34,1.5,0.6,1); will-change: transform; }
+  .hp-chip:active { transform: scale(0.94); }
+  @keyframes hp-chip-fill {
+    0%   { background: var(--card-2); color: var(--ink); border-color: var(--gold-line); transform: scale(1); }
+    35%  { background: var(--gold); color: #1a1407; border-color: var(--gold); transform: scale(1.05); }
+    100% { background: var(--gold); color: #1a1407; border-color: var(--gold); transform: scale(0.9); opacity: 0; }
+  }
+  .hp-chip.firing { animation: hp-chip-fill 280ms cubic-bezier(0.4,0,0.2,1) forwards; }
+
+  /* Shimmer placeholders */
+  @keyframes hp-shimmer {
+    0% { background-position: -200px 0; }
+    100% { background-position: 220px 0; }
+  }
+  .hp-shimmer {
+    background: linear-gradient(90deg, rgba(255,255,255,0.04) 0%, rgba(201,168,76,0.13) 50%, rgba(255,255,255,0.04) 100%);
+    background-size: 220px 100%;
+    animation: hp-shimmer 1.1s linear infinite;
+  }
+
+  /* Session complete card */
+  @keyframes hp-sheet-up {
+    from { transform: translateY(40px); }
+    to   { transform: translateY(0); }
+  }
+  .anim-ready .hp-sheet { animation: hp-sheet-up 480ms cubic-bezier(0.22,1.1,0.36,1) both; }
+  @keyframes hp-scrim-in { from { opacity: 0; } to { opacity: 1; } }
+  .hp-scrim { animation: hp-scrim-in 300ms ease both; }
+
+  @keyframes hp-wave {
+    0%, 100% { height: 14px; opacity: 0.5; }
+    50% { height: 48px; opacity: 1; }
+  }
+</style>
+</head>
+<body>
+  <div id="stage"></div>
+
+  <script>
+    /* Gate entrance animations: only add .anim-ready if the frame loop is
+       actually running (not paused/offscreen). Content stays visible at rest. */
+    (function () {
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) return;
+      var t0;
+      function check(t) {
+        if (!t0) { t0 = t; requestAnimationFrame(check); return; }
+        if (t - t0 > 1) document.documentElement.classList.add('anim-ready');
+      }
+      requestAnimationFrame(check);
+    })();
+  </script>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <!-- data.js -->
+  <script>
+/* HotPack calling-flow data model. */
+(function () {
+  const CAT = {
+    billing:   { tag: '#c9a84c', soft: 'rgba(201,168,76,0.14)' },
+    orders:    { tag: '#9bb06a', soft: 'rgba(155,176,106,0.13)' },
+    technical: { tag: '#7fa6d6', soft: 'rgba(127,166,214,0.13)' },
+    complaint: { tag: '#cd7f86', soft: 'rgba(205,127,134,0.13)' },
+    corporate: { tag: '#8aa6c9', soft: 'rgba(138,166,201,0.13)' },
+    product:   { tag: '#c79a78', soft: 'rgba(199,154,120,0.13)' },
+    general:   { tag: '#cabfa3', soft: 'rgba(202,191,163,0.13)' },
+  };
+  const TONE = {
+    navy:       '#2c3e54',
+    burgundy:   '#5e2b35',
+    olive:      '#454d2c',
+    terracotta: '#6e3d2a',
+    cream:      '#5a5340',
+    gold:       '#5a4c22',
+    steel:      '#34465c',
+  };
+  const avail = {
+    now:    { state: 'green', label: 'Available now' },
+    queue1: { state: 'amber', label: '1 in queue' },
+    queue2: { state: 'amber', label: '2 in queue' },
+    busy:   { state: 'red',   label: 'Busy · callback available' },
+  };
+  const company = {
+    id: 'hotpack',
+    name: 'HotPack',
+    domain: 'hotpackglobal.com',
+    logo: 'HP',
+    status: { state: 'green', label: 'Receiving calls · avg wait 30s' },
+    departments: [
+      {
+        id: 'orders', icon: '📦', name: 'Orders & Delivery',
+        desc: 'Track, change & expedite shipments', tone: TONE.navy, cat: 'orders',
+        live: { state: 'green', label: '8 agents · receiving now' },
+        common: ['Where is my order?', 'My delivery is late', 'Change my delivery address', 'Add items to an open order'],
+        roles: [
+          {
+            id: 'dispatch', title: 'Dispatch Coordinator',
+            scope: 'Live tracking and delivery windows',
+            avail: avail.now, agent: { initials: 'AM', first: 'Amal' },
+            matters: [
+              { id: 'where', title: 'Where is my order right now?', context: 'Live location and ETA for an open shipment', eta: '2 min', cat: 'orders' },
+              { id: 'late', title: 'My delivery is running late', context: 'A confirmed order has missed its delivery window', eta: '4 min', cat: 'orders' },
+              { id: 'window', title: 'Change my delivery window', context: 'Move a scheduled delivery to a new day or slot', eta: '3 min', cat: 'orders' },
+            ],
+          },
+          {
+            id: 'amend', title: 'Order Amendments',
+            scope: 'Change quantities, items or address before dispatch',
+            avail: avail.queue2,
+            matters: [
+              { id: 'address', title: 'Change my delivery address', context: 'Reroute an order that has not yet shipped', eta: '3 min', cat: 'orders' },
+              { id: 'additems', title: 'Add items to an open order', context: 'Append products to an order placed today', eta: '4 min', cat: 'orders' },
+              { id: 'qty', title: 'Change a quantity', context: 'Increase or reduce cases on a pending order', eta: '3 min', cat: 'orders' },
+            ],
+          },
+          {
+            id: 'expedite', title: 'Expediting Desk',
+            scope: 'Rush an urgent or late order',
+            avail: avail.now, agent: { initials: 'Rf', first: 'Rafiq' },
+            matters: [
+              { id: 'rush', title: 'I need this order urgently', context: 'Request same-day or next-morning expediting', eta: '5 min', cat: 'orders' },
+              { id: 'partial', title: 'Send what is ready now', context: 'Split-ship the in-stock portion immediately', eta: '4 min', cat: 'orders' },
+            ],
+          },
+          {
+            id: 'returns', title: 'Returns & Pickups',
+            scope: 'Arrange collection of wrong or surplus items',
+            avail: avail.now,
+            matters: [
+              { id: 'wrong', title: 'I received the wrong items', context: 'Arrange a pickup and correct re-delivery', eta: '4 min', cat: 'orders' },
+              { id: 'surplus', title: 'Return surplus stock', context: 'Send back unopened cases within terms', eta: '3 min', cat: 'orders' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'billing', icon: '🧾', name: 'Billing & Payments',
+        desc: 'Invoices, credit terms & refunds', tone: TONE.gold, cat: 'billing',
+        live: { state: 'green', label: '5 agents · receiving now' },
+        common: ['I was charged incorrectly', 'I need a VAT invoice', 'My bill is higher than usual', 'Set up a payment plan'],
+        roles: [
+          {
+            id: 'specialist', title: 'Billing Specialist',
+            scope: 'General billing queries and payment issues',
+            avail: avail.now, agent: { initials: 'NS', first: 'Noor' },
+            matters: [
+              { id: 'incorrect', title: 'Incorrect charge on my bill', context: 'I was billed for something I did not order', eta: '3 min', cat: 'billing' },
+              { id: 'higher', title: 'Bill higher than expected', context: 'My invoice is more than my usual amount', eta: '4 min', cat: 'billing' },
+              { id: 'notreflected', title: 'Payment not reflected', context: 'I paid but it still shows as outstanding', eta: '2 min', cat: 'billing' },
+              { id: 'extension', title: 'Need a payment extension', context: 'I need more time to pay this month', eta: '3 min', cat: 'billing' },
+              { id: 'recurring', title: 'Cancel a recurring charge', context: 'Stop an automatic renewal or standing order', eta: '2 min', cat: 'billing' },
+            ],
+          },
+          {
+            id: 'refunds', title: 'Refunds & Disputes',
+            scope: 'Incorrect charges and refund processing',
+            avail: avail.queue1, agent: { initials: 'KV', first: 'Kavya' },
+            matters: [
+              { id: 'dispute', title: 'Dispute a charge', context: 'Formally contest a line on an invoice', eta: '5 min', cat: 'billing' },
+              { id: 'refundstatus', title: 'Where is my refund?', context: 'Track a refund that was already approved', eta: '3 min', cat: 'billing' },
+              { id: 'double', title: 'I was charged twice', context: 'A duplicate payment was taken', eta: '3 min', cat: 'billing' },
+            ],
+          },
+          {
+            id: 'plans', title: 'Payment Plans',
+            scope: 'Instalments and deferred payment terms',
+            avail: avail.now,
+            matters: [
+              { id: 'setup', title: 'Set up a payment plan', context: 'Split an outstanding balance into instalments', eta: '4 min', cat: 'billing' },
+              { id: 'terms', title: 'Change my credit terms', context: 'Move from 30-day to 60-day terms', eta: '5 min', cat: 'billing' },
+            ],
+          },
+          {
+            id: 'invoices', title: 'Invoice Requests',
+            scope: 'Duplicate bills, VAT invoices, statements',
+            avail: avail.now,
+            matters: [
+              { id: 'vat', title: 'I need a VAT invoice', context: 'Get a tax-compliant invoice for an order', eta: '2 min', cat: 'billing' },
+              { id: 'duplicate', title: 'Send me a duplicate bill', context: 'Re-issue a copy of a past invoice', eta: '2 min', cat: 'billing' },
+              { id: 'statement', title: 'Full account statement', context: 'A statement of all charges this quarter', eta: '3 min', cat: 'billing' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'products', icon: '🏭', name: 'Products & Custom Print',
+        desc: 'Catalogue, samples & branding', tone: TONE.olive, cat: 'product',
+        live: { state: 'green', label: '4 agents · receiving now' },
+        common: ['Request product samples', 'Print my logo on packaging', 'Is this item in stock?', 'Find a food-safe alternative'],
+        roles: [
+          {
+            id: 'catalogue', title: 'Product Advisor',
+            scope: 'Specs, materials and stock availability',
+            avail: avail.now, agent: { initials: 'Tn', first: 'Tania' },
+            matters: [
+              { id: 'stock', title: 'Is this item in stock?', context: 'Check availability and lead time for a product', eta: '2 min', cat: 'product' },
+              { id: 'spec', title: 'I need the full spec sheet', context: 'Dimensions, material and food-safety certs', eta: '3 min', cat: 'product' },
+              { id: 'alt', title: 'Find a food-safe alternative', context: 'Suggest a compliant substitute product', eta: '4 min', cat: 'product' },
+            ],
+          },
+          {
+            id: 'samples', title: 'Samples Desk',
+            scope: 'Request and track product samples',
+            avail: avail.now,
+            matters: [
+              { id: 'reqsample', title: 'Request product samples', context: 'Order free samples before committing', eta: '3 min', cat: 'product' },
+              { id: 'tracksample', title: 'Track my sample request', context: 'Status of samples already requested', eta: '2 min', cat: 'product' },
+            ],
+          },
+          {
+            id: 'custom', title: 'Custom Printing',
+            scope: 'Branded packaging and bespoke print runs',
+            avail: avail.queue1, agent: { initials: 'Os', first: 'Omar' },
+            matters: [
+              { id: 'logo', title: 'Print my logo on packaging', context: 'Set up branded print on a stock product', eta: '6 min', cat: 'product' },
+              { id: 'artwork', title: 'Submit print artwork', context: 'Share files and check print requirements', eta: '4 min', cat: 'product' },
+              { id: 'minrun', title: 'What is the minimum run?', context: 'Minimum order quantity for custom print', eta: '3 min', cat: 'product' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'corporate', icon: '🏢', name: 'Corporate & Bulk',
+        desc: 'Wholesale, contracts & tenders', tone: TONE.steel, cat: 'corporate',
+        live: { state: 'green', label: '3 agents · receiving now' },
+        common: ['Open a wholesale account', 'I am tendering for a contract', 'Negotiate bulk pricing', 'Speak to my account manager'],
+        roles: [
+          {
+            id: 'manager', title: 'Senior Account Manager',
+            scope: 'Existing corporate accounts and contracts',
+            avail: avail.now, agent: { initials: 'Fz', first: 'Faiza' },
+            matters: [
+              { id: 'myam', title: 'Speak to my account manager', context: 'Reach the manager assigned to your account', eta: '2 min', cat: 'corporate' },
+              { id: 'renew', title: 'Renew our annual contract', context: 'Review and renew a supply agreement', eta: '6 min', cat: 'corporate' },
+              { id: 'review', title: 'Quarterly account review', context: 'Schedule a usage and pricing review', eta: '5 min', cat: 'corporate' },
+            ],
+          },
+          {
+            id: 'newbiz', title: 'New Business',
+            scope: 'Opening wholesale and corporate accounts',
+            avail: avail.now,
+            matters: [
+              { id: 'open', title: 'Open a wholesale account', context: 'Set up a new trade account with terms', eta: '5 min', cat: 'corporate' },
+              { id: 'pricing', title: 'Negotiate bulk pricing', context: 'Volume tiers for high-quantity orders', eta: '6 min', cat: 'corporate' },
+            ],
+          },
+          {
+            id: 'tenders', title: 'Tenders & Procurement',
+            scope: 'Public and private contract tenders',
+            avail: avail.queue1,
+            matters: [
+              { id: 'tender', title: 'I am tendering for a contract', context: 'Submit or query a formal tender', eta: '7 min', cat: 'corporate' },
+              { id: 'docs', title: 'Request compliance documents', context: 'Certifications needed for procurement', eta: '4 min', cat: 'corporate' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'complaints', icon: '⚖️', name: 'Complaints & Quality',
+        desc: 'Defects, damaged goods & returns', tone: TONE.burgundy, cat: 'complaint',
+        live: { state: 'amber', label: 'High volume · est. 4 min' },
+        common: ['My order arrived damaged', 'There is a defect in the product', 'Escalate an unresolved issue', 'I want to make a formal complaint'],
+        roles: [
+          {
+            id: 'quality', title: 'Quality Officer',
+            scope: 'Product defects and food-safety concerns',
+            avail: avail.now, agent: { initials: 'Hd', first: 'Huda' },
+            matters: [
+              { id: 'defect', title: 'There is a defect in the product', context: 'Report a manufacturing or quality fault', eta: '5 min', cat: 'complaint' },
+              { id: 'safety', title: 'A food-safety concern', context: 'Urgent issue with a food-contact product', eta: '4 min', cat: 'complaint' },
+              { id: 'batch', title: 'Report a faulty batch', context: 'A whole batch or lot appears affected', eta: '6 min', cat: 'complaint' },
+            ],
+          },
+          {
+            id: 'damage', title: 'Damaged Goods',
+            scope: 'Items damaged in transit or on arrival',
+            avail: avail.queue2,
+            matters: [
+              { id: 'damaged', title: 'My order arrived damaged', context: 'Goods broken or crushed on delivery', eta: '4 min', cat: 'complaint' },
+              { id: 'claim', title: 'File a damage claim', context: 'Start a claim with photos and details', eta: '6 min', cat: 'complaint' },
+            ],
+          },
+          {
+            id: 'escalation', title: 'Escalations Officer',
+            scope: 'Unresolved issues and formal complaints',
+            avail: avail.busy,
+            matters: [
+              { id: 'escalate', title: 'Escalate an unresolved issue', context: 'A previous matter was not resolved', eta: '7 min', cat: 'complaint' },
+              { id: 'formal', title: 'Make a formal complaint', context: 'Log a complaint with a reference number', eta: '6 min', cat: 'complaint' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'general', icon: '💬', name: 'General Enquiry',
+        desc: 'Anything else', tone: TONE.cream, cat: 'general',
+        live: { state: 'green', label: '6 agents · receiving now' },
+        common: ['Where are you located?', 'What are your opening hours?', 'Partnership enquiry', 'I am not sure who I need'],
+        roles: [
+          {
+            id: 'reception', title: 'Reception',
+            scope: 'Point me to the right place',
+            avail: avail.now, agent: { initials: 'Sa', first: 'Sara' },
+            matters: [
+              { id: 'whoneed', title: 'I am not sure who I need', context: 'Describe it and we will route you', eta: '2 min', cat: 'general' },
+              { id: 'hours', title: 'What are your opening hours?', context: 'Branch and warehouse hours', eta: '1 min', cat: 'general' },
+              { id: 'location', title: 'Where are you located?', context: 'Branches, warehouses and showrooms', eta: '1 min', cat: 'general' },
+            ],
+          },
+          {
+            id: 'partnerships', title: 'Partnerships',
+            scope: 'Press, partnerships and other enquiries',
+            avail: avail.now,
+            matters: [
+              { id: 'partner', title: 'Partnership enquiry', context: 'Explore working together', eta: '4 min', cat: 'general' },
+              { id: 'press', title: 'Press & media', context: 'Media requests and statements', eta: '3 min', cat: 'general' },
+            ],
+          },
+        ],
+      },
+    ],
+  };
+  window.HOTPACK = company;
+  window.HP_CAT = CAT;
+})();
+  </script>
+
+  <!-- All React components -->
+  <script type="text/babel">
+// ─── iOS Frame ───────────────────────────────────────────────────────────────
+
+function IOSStatusBar({ dark = false, time = '9:41' }) {
+  const c = dark ? '#fff' : '#000';
+  return (
+    <div style={{ display:'flex', gap:154, alignItems:'center', justifyContent:'center', padding:'21px 24px 19px', boxSizing:'border-box', position:'relative', zIndex:20, width:'100%' }}>
+      <div style={{ flex:1, height:22, display:'flex', alignItems:'center', justifyContent:'center', paddingTop:1.5 }}>
+        <span style={{ fontFamily:'-apple-system,"SF Pro",system-ui', fontWeight:590, fontSize:17, lineHeight:'22px', color:c }}>{time}</span>
+      </div>
+      <div style={{ flex:1, height:22, display:'flex', alignItems:'center', justifyContent:'center', gap:7, paddingTop:1, paddingRight:1 }}>
+        <svg width="19" height="12" viewBox="0 0 19 12">
+          <rect x="0" y="7.5" width="3.2" height="4.5" rx="0.7" fill={c}/>
+          <rect x="4.8" y="5" width="3.2" height="7" rx="0.7" fill={c}/>
+          <rect x="9.6" y="2.5" width="3.2" height="9.5" rx="0.7" fill={c}/>
+          <rect x="14.4" y="0" width="3.2" height="12" rx="0.7" fill={c}/>
+        </svg>
+        <svg width="17" height="12" viewBox="0 0 17 12">
+          <path d="M8.5 3.2C10.8 3.2 12.9 4.1 14.4 5.6L15.5 4.5C13.7 2.7 11.2 1.5 8.5 1.5C5.8 1.5 3.3 2.7 1.5 4.5L2.6 5.6C4.1 4.1 6.2 3.2 8.5 3.2Z" fill={c}/>
+          <path d="M8.5 6.8C9.9 6.8 11.1 7.3 12 8.2L13.1 7.1C11.8 5.9 10.2 5.1 8.5 5.1C6.8 5.1 5.2 5.9 3.9 7.1L5 8.2C5.9 7.3 7.1 6.8 8.5 6.8Z" fill={c}/>
+          <circle cx="8.5" cy="10.5" r="1.5" fill={c}/>
+        </svg>
+        <svg width="27" height="13" viewBox="0 0 27 13">
+          <rect x="0.5" y="0.5" width="23" height="12" rx="3.5" stroke={c} strokeOpacity="0.35" fill="none"/>
+          <rect x="2" y="2" width="20" height="9" rx="2" fill={c}/>
+          <path d="M25 4.5V8.5C25.8 8.2 26.5 7.2 26.5 6.5C26.5 5.8 25.8 4.8 25 4.5Z" fill={c} fillOpacity="0.4"/>
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+function IOSDevice({ children, width=402, height=874, dark=false }) {
+  return (
+    <div style={{ width, height, borderRadius:48, overflow:'hidden', position:'relative', background:dark?'#000':'#F2F2F7', boxShadow:'0 40px 80px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.12)', fontFamily:'-apple-system,system-ui,sans-serif', WebkitFontSmoothing:'antialiased' }}>
+      <div style={{ position:'absolute', top:11, left:'50%', transform:'translateX(-50%)', width:126, height:37, borderRadius:24, background:'#000', zIndex:50 }} />
+      <div style={{ position:'absolute', top:0, left:0, right:0, zIndex:10 }}>
+        <IOSStatusBar dark={dark} />
+      </div>
+      <div style={{ height:'100%', display:'flex', flexDirection:'column' }}>
+        <div style={{ flex:1, overflow:'auto' }}>{children}</div>
+      </div>
+      <div style={{ position:'absolute', bottom:0, left:0, right:0, zIndex:60, height:34, display:'flex', justifyContent:'center', alignItems:'flex-end', paddingBottom:8, pointerEvents:'none' }}>
+        <div style={{ width:139, height:5, borderRadius:100, background:dark?'rgba(255,255,255,0.7)':'rgba(0,0,0,0.25)' }} />
+      </div>
+    </div>
+  );
+}
+
+// ─── Tweaks Panel ─────────────────────────────────────────────────────────────
+
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;max-height:calc(100vh - 32px);display:flex;flex-direction:column;transform:scale(var(--dc-inv-zoom,1));transform-origin:bottom right;background:rgba(250,249,247,.78);color:#29261b;-webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);border:.5px solid rgba(255,255,255,.6);border-radius:14px;box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;overflow-x:hidden;min-height:0}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;background:rgba(0,0,0,.06);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2}
+  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+`;
+
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  const setTweak = React.useCallback((keyOrEdits, val) => {
+    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null ? keyOrEdits : { [keyOrEdits]: val };
+    setValues(prev => ({ ...prev, ...edits }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+    window.dispatchEvent(new CustomEvent('tweakchange', { detail: edits }));
+  }, []);
+  return [values, setTweak];
+}
+
+function TweaksPanel({ title='Tweaks', children }) {
+  const [open, setOpen] = React.useState(false);
+  const dragRef = React.useRef(null);
+  const offsetRef = React.useRef({ x:16, y:16 });
+  const PAD = 16;
+  const clamp = React.useCallback(() => {
+    const p = dragRef.current; if (!p) return;
+    const w = p.offsetWidth, h = p.offsetHeight;
+    offsetRef.current = { x: Math.min(Math.max(PAD, offsetRef.current.x), Math.max(PAD, window.innerWidth-w-PAD)), y: Math.min(Math.max(PAD, offsetRef.current.y), Math.max(PAD, window.innerHeight-h-PAD)) };
+    p.style.right = offsetRef.current.x+'px'; p.style.bottom = offsetRef.current.y+'px';
+  }, []);
+  React.useEffect(() => {
+    if (!open) return; clamp();
+    window.addEventListener('resize', clamp); return () => window.removeEventListener('resize', clamp);
+  }, [open, clamp]);
+  React.useEffect(() => {
+    const onMsg = e => { const t=e?.data?.type; if(t==='__activate_edit_mode') setOpen(true); else if(t==='__deactivate_edit_mode') setOpen(false); };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type:'__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+  const dismiss = () => { setOpen(false); window.parent.postMessage({ type:'__edit_mode_dismissed' }, '*'); };
+  const onDragStart = e => {
+    const p = dragRef.current; if (!p) return;
+    const r = p.getBoundingClientRect(), sx=e.clientX, sy=e.clientY;
+    const sr = window.innerWidth-r.right, sb = window.innerHeight-r.bottom;
+    const move = ev => { offsetRef.current = { x: sr-(ev.clientX-sx), y: sb-(ev.clientY-sy) }; clamp(); };
+    const up = () => { window.removeEventListener('mousemove',move); window.removeEventListener('mouseup',up); };
+    window.addEventListener('mousemove',move); window.addEventListener('mouseup',up);
+  };
+  if (!open) return null;
+  return (
+    <>
+      <style>{__TWEAKS_STYLE}</style>
+      <div ref={dragRef} className="twk-panel" data-omelette-chrome="" style={{ right:offsetRef.current.x, bottom:offsetRef.current.y }}>
+        <div className="twk-hd" onMouseDown={onDragStart}><b>{title}</b><button className="twk-x" onMouseDown={e=>e.stopPropagation()} onClick={dismiss}>✕</button></div>
+        <div className="twk-body">{children}</div>
+      </div>
+    </>
+  );
+}
+function TweakSection({ label }) { return <div className="twk-sect">{label}</div>; }
+function TweakRadio({ label, value, options, onChange }) {
+  const trackRef = React.useRef(null);
+  const opts = options.map(o => typeof o==='object' ? o : { value:o, label:o });
+  const idx = Math.max(0, opts.findIndex(o => o.value===value));
+  const n = opts.length;
+  const segAt = cx => { const r=trackRef.current.getBoundingClientRect(); return opts[Math.max(0,Math.min(n-1,Math.floor(((cx-r.left-2)/(r.width-4))*n)))].value; };
+  const valueRef = React.useRef(value); valueRef.current = value;
+  const onPD = e => {
+    const v0=segAt(e.clientX); if(v0!==valueRef.current) onChange(v0);
+    const move=ev=>{const v=segAt(ev.clientX);if(v!==valueRef.current)onChange(v);};
+    const up=()=>{window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',up);};
+    window.addEventListener('pointermove',move); window.addEventListener('pointerup',up);
+  };
+  return (
+    <div className="twk-row">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPD} className="twk-seg">
+        <div className="twk-seg-thumb" style={{ left:`calc(2px + ${idx} * (100% - 4px) / ${n})`, width:`calc((100% - 4px) / ${n})` }} />
+        {opts.map(o => <button key={o.value} type="button" role="radio" aria-checked={o.value===value}>{o.label}</button>)}
+      </div>
+    </div>
+  );
+}
+function TweakToggle({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <button type="button" className="twk-toggle" data-on={value?'1':'0'} role="switch" aria-checked={!!value} onClick={()=>onChange(!value)}><i/></button>
+    </div>
+  );
+}
+
+// ─── Shared UI Primitives ────────────────────────────────────────────────────
+
+const HP_STATUS_COLOR = { green:'var(--green)', amber:'var(--amber)', red:'var(--red)' };
+
+function StatusDot({ state='green', pulse=false, size=8 }) {
+  return <span className={'hp-dot'+(pulse?' pulse':'')} style={{ width:size, height:size, background:HP_STATUS_COLOR[state]||'var(--green)' }} />;
+}
+
+function BackBtn({ onClick, dark=true }) {
+  return (
+    <button onClick={onClick} aria-label="Back" className="hp-tile" style={{ width:38, height:38, borderRadius:999, flexShrink:0, border:dark?'1px solid var(--line-strong)':'1px solid rgba(26,20,7,0.22)', background:dark?'rgba(255,255,255,0.05)':'rgba(26,20,7,0.08)', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', padding:0 }}>
+      <svg width="9" height="16" viewBox="0 0 9 16" fill="none">
+        <path d="M7.5 1.5L1.5 8l6 6.5" stroke={dark?'var(--ink)':'#1a1407'} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    </button>
+  );
+}
+
+function Avatar({ initials, size=34, ring=true, bg='var(--card-2)', color='var(--gold)' }) {
+  return <div style={{ width:size, height:size, borderRadius:999, flexShrink:0, background:bg, color, border:ring?'1px solid var(--gold-line)':'1px solid var(--line)', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'var(--sans)', fontWeight:600, fontSize:size*0.36, letterSpacing:'0.02em' }}>{initials}</div>;
+}
+
+function SectionLabel({ children, style={} }) {
+  return <div className="hp-label" style={{ margin:'0 0 14px', ...style }}>{children}</div>;
+}
+
+function Breadcrumb({ trail }) {
+  return (
+    <div style={{ display:'flex', alignItems:'center', flexWrap:'wrap', gap:5, lineHeight:1.3 }}>
+      {trail.map((t,i) => (
+        <React.Fragment key={i}>
+          {i>0 && <span style={{ color:'var(--ink-3)', fontSize:12 }}>›</span>}
+          <span style={{ fontSize:12, fontWeight:i===trail.length-1?600:500, color:i===trail.length-1?'var(--gold)':'var(--ink-3)', letterSpacing:'0.01em' }}>{t}</span>
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+function BandHeader({ company, onBack }) {
+  return (
+    <div style={{ background:'linear-gradient(158deg, #dabd5d 0%, #c9a84c 52%, #b7973e 100%)', padding:'54px 20px 22px', position:'relative', flexShrink:0, boxShadow:'0 14px 30px rgba(0,0,0,0.45)' }}>
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:20 }}>
+        <BackBtn onClick={onBack} dark={false}/>
+        <span style={{ fontSize:10, fontWeight:700, letterSpacing:'0.22em', color:'rgba(26,20,7,0.62)' }}>AINAGER</span>
+      </div>
+      <div style={{ display:'flex', alignItems:'center', gap:15 }}>
+        <div style={{ width:58, height:58, borderRadius:17, flexShrink:0, background:'linear-gradient(160deg, #15110a, #2a2114)', border:'1px solid rgba(26,20,7,0.3)', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'var(--serif)', fontStyle:'italic', fontWeight:700, fontSize:25, color:'var(--gold)', boxShadow:'inset 0 1px 1px rgba(255,255,255,0.08)' }}>{company.logo}</div>
+        <div style={{ minWidth:0 }}>
+          <div style={{ fontFamily:'var(--serif)', fontStyle:'italic', fontWeight:700, fontSize:34, lineHeight:1, color:'#1a1407', letterSpacing:'-0.01em' }}>{company.name}</div>
+          <div style={{ fontSize:12.5, color:'rgba(26,20,7,0.6)', marginTop:5, fontWeight:500 }}>{company.domain}</div>
+        </div>
+      </div>
+      <div style={{ marginTop:18, display:'inline-flex', alignItems:'center', gap:8, background:'rgba(20,15,6,0.82)', padding:'7px 13px 7px 11px', borderRadius:999 }}>
+        <StatusDot state={company.status.state} pulse size={7}/>
+        <span style={{ fontSize:12, fontWeight:500, color:'var(--ink)', letterSpacing:'0.01em' }}>{company.status.label}</span>
+      </div>
+    </div>
+  );
+}
+
+function SlimHeader({ company, title, trail, onBack }) {
+  return (
+    <div style={{ background:'var(--bg-2)', padding:'52px 18px 16px', flexShrink:0, borderBottom:'1px solid var(--line)' }}>
+      <div style={{ display:'flex', alignItems:'center', gap:13 }}>
+        <BackBtn onClick={onBack}/>
+        <div style={{ minWidth:0, flex:1 }}>
+          <div style={{ fontSize:11.5, color:'var(--ink-3)', fontWeight:500, marginBottom:3 }}>{company.name}</div>
+          <div style={{ fontFamily:'var(--serif)', fontStyle:'italic', fontWeight:600, fontSize:23, lineHeight:1, color:'var(--gold)', letterSpacing:'-0.01em' }}>{title}</div>
+        </div>
+      </div>
+      {trail && <div style={{ marginTop:13 }}><Breadcrumb trail={trail}/></div>}
+    </div>
+  );
+}
+
+function DeptTile({ dept, delay=0, onClick }) {
+  const [flash, setFlash] = React.useState(false);
+  const fire = () => { setFlash(true); setTimeout(onClick, 230); };
+  return (
+    <button onClick={fire} className={'hp-tile hp-rise'+(flash?' flash':'')} style={{ animationDelay:delay+'ms', textAlign:'left', cursor:'pointer', padding:'16px 15px 14px', background:'var(--card)', border:'1px solid var(--line)', borderRadius:'var(--r-card)', display:'flex', flexDirection:'column', gap:0, minHeight:142, fontFamily:'var(--sans)', color:'var(--ink)' }}>
+      <div style={{ width:42, height:42, borderRadius:12, marginBottom:13, background:dept.tone, border:'1px solid rgba(255,255,255,0.07)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:21 }}>{dept.icon}</div>
+      <div style={{ fontWeight:600, fontSize:15.5, lineHeight:1.15, marginBottom:4 }}>{dept.name}</div>
+      <div style={{ fontSize:12.5, color:'var(--ink-2)', lineHeight:1.3, flex:1 }}>{dept.desc}</div>
+      <div style={{ display:'flex', alignItems:'center', gap:7, marginTop:12 }}>
+        <StatusDot state={dept.live.state} pulse={dept.live.state==='green'} size={6}/>
+        <span style={{ fontSize:10.5, color:'var(--ink-3)', fontWeight:500, letterSpacing:'0.01em' }}>{dept.live.label}</span>
+      </div>
+    </button>
+  );
+}
+
+const HP_AVAIL_COLOR = { green:'var(--green)', amber:'var(--amber)', red:'var(--red)' };
+
+function RoleTile({ role, delay=0, onClick }) {
+  const [flash, setFlash] = React.useState(false);
+  const fire = () => { setFlash(true); setTimeout(onClick, 230); };
+  return (
+    <button onClick={fire} className={'hp-tile hp-rise'+(flash?' flash':'')} style={{ animationDelay:delay+'ms', textAlign:'left', cursor:'pointer', padding:'15px 14px 13px', background:'var(--card)', border:'1px solid var(--line)', borderRadius:'var(--r-card)', display:'flex', flexDirection:'column', minHeight:158, fontFamily:'var(--sans)', color:'var(--ink)' }}>
+      <div style={{ marginBottom:11 }}>
+        {role.agent
+          ? <Avatar initials={role.agent.initials} size={36}/>
+          : <div style={{ width:36, height:36, borderRadius:999, background:'var(--card-2)', border:'1px solid var(--line)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="var(--ink-3)" strokeWidth="1.6"/><path d="M4.5 20c0-3.6 3.4-6 7.5-6s7.5 2.4 7.5 6" stroke="var(--ink-3)" strokeWidth="1.6" strokeLinecap="round"/></svg>
+            </div>}
+      </div>
+      <div style={{ fontWeight:600, fontSize:15, lineHeight:1.15, marginBottom:4 }}>{role.title}</div>
+      <div style={{ fontSize:12, color:'var(--ink-2)', lineHeight:1.32, flex:1 }}>{role.scope}</div>
+      <div style={{ display:'flex', alignItems:'center', gap:7, marginTop:11 }}>
+        <StatusDot state={role.avail.state} pulse={role.avail.state==='green'} size={6}/>
+        <span style={{ fontSize:10.5, fontWeight:500, letterSpacing:'0.01em', color:HP_AVAIL_COLOR[role.avail.state] }}>{role.avail.label}</span>
+        {role.agent && <span style={{ fontSize:10.5, color:'var(--ink-3)', marginLeft:'auto', fontWeight:500 }}>{role.agent.first}</span>}
+      </div>
+    </button>
+  );
+}
+
+function QuickChip({ children, delay=0, onClick }) {
+  const [flash, setFlash] = React.useState(false);
+  const fire = () => { setFlash(true); setTimeout(onClick, 200); };
+  return (
+    <button onClick={fire} className={'hp-chip hp-rise'+(flash?' firing':'')} style={{ animationDelay:delay+'ms', cursor:'pointer', textAlign:'left', background:'var(--card-2)', color:'var(--ink)', border:'1px solid var(--gold-line)', borderRadius:999, padding:'10px 15px', fontFamily:'var(--sans)', fontSize:13, fontWeight:500 }}>{children}</button>
+  );
+}
+
+function MatterTile({ matter, delay=0, onClick }) {
+  const cat = window.HP_CAT[matter.cat] || window.HP_CAT.general;
+  const [flash, setFlash] = React.useState(false);
+  const fire = () => { setFlash(true); setTimeout(onClick, 230); };
+  return (
+    <button onClick={fire} className={'hp-tile hp-rise'+(flash?' flash':'')} style={{ animationDelay:delay+'ms', textAlign:'left', cursor:'pointer', width:'100%', background:'var(--card)', border:'1px solid var(--line)', borderRadius:'var(--r-card)', padding:'15px 16px', display:'flex', alignItems:'flex-start', gap:13, fontFamily:'var(--sans)', color:'var(--ink)' }}>
+      <div style={{ width:4, alignSelf:'stretch', borderRadius:4, background:cat.tag, flexShrink:0, minHeight:38 }}/>
+      <div style={{ flex:1, minWidth:0 }}>
+        <div style={{ fontWeight:600, fontSize:15, lineHeight:1.25 }}>{matter.title}</div>
+        <div style={{ fontSize:12.5, color:'var(--ink-2)', lineHeight:1.35, marginTop:4 }}>{matter.context}</div>
+        <div style={{ display:'flex', alignItems:'center', gap:6, marginTop:9 }}>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" style={{ flexShrink:0 }}><circle cx="12" cy="12" r="9" stroke="var(--ink-3)" strokeWidth="2"/><path d="M12 7.5V12l3 2" stroke="var(--ink-3)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <span style={{ fontSize:11, color:'var(--ink-3)', fontWeight:500 }}>Usually resolved in {matter.eta}</span>
+        </div>
+      </div>
+      <svg width="7" height="13" viewBox="0 0 8 14" style={{ flexShrink:0, marginTop:4 }}><path d="M1 1l6 6-6 6" stroke="var(--ink-3)" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>
+    </button>
+  );
+}
+
+// ─── Screens A, B, C ─────────────────────────────────────────────────────────
+
+function ScreenScroll({ children, pad=18 }) {
+  return <div className="hp-scroll" style={{ flex:1, overflowY:'auto', overflowX:'hidden', padding:`20px ${pad}px 26px` }}>{children}</div>;
+}
+function Grid2({ children }) {
+  return <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:11 }}>{children}</div>;
+}
+
+function ScreenA({ company, anim, onBack, onDept }) {
+  return (
+    <div className={'hp-screen '+anim} style={{ height:'100%', display:'flex', flexDirection:'column', background:'var(--bg)' }}>
+      <BandHeader company={company} onBack={onBack}/>
+      <ScreenScroll>
+        <SectionLabel>Who do you want to reach?</SectionLabel>
+        <Grid2>
+          {company.departments.map((d,i) => <DeptTile key={d.id} dept={d} delay={i*55} onClick={()=>onDept(d)}/>)}
+        </Grid2>
+        <div style={{ textAlign:'center', marginTop:22, fontSize:11, color:'var(--ink-3)', letterSpacing:'0.02em' }}>No hold music · No press 1 · No transfers</div>
+      </ScreenScroll>
+    </div>
+  );
+}
+
+function ScreenB({ company, dept, anim, onBack, onRole, onQuick }) {
+  return (
+    <div className={'hp-screen '+anim} style={{ height:'100%', display:'flex', flexDirection:'column', background:'var(--bg)' }}>
+      <SlimHeader company={company} title={dept.name} trail={[company.name, dept.name]} onBack={onBack}/>
+      <ScreenScroll>
+        <SectionLabel>Who do you need?</SectionLabel>
+        <Grid2>
+          {dept.roles.map((r,i) => <RoleTile key={r.id} role={r} delay={i*55} onClick={()=>onRole(r)}/>)}
+        </Grid2>
+        <SectionLabel style={{ margin:'26px 0 13px' }}>Common matters</SectionLabel>
+        <div style={{ display:'flex', flexDirection:'column', gap:9 }}>
+          {dept.common.map((c,i) => <QuickChip key={i} delay={250+i*50} onClick={()=>onQuick(c)}>{c}</QuickChip>)}
+        </div>
+      </ScreenScroll>
+    </div>
+  );
+}
+
+function ScreenC({ company, dept, role, anim, onBack, onMatter, onFreeText }) {
+  const [draft, setDraft] = React.useState('');
+  const submit = () => { if (draft.trim()) onFreeText(draft.trim()); };
+  return (
+    <div className={'hp-screen '+anim} style={{ height:'100%', display:'flex', flexDirection:'column', background:'var(--bg)' }}>
+      <SlimHeader company={company} title={role.title} trail={[company.name, dept.name, role.title]} onBack={onBack}/>
+      <div className="hp-scroll" style={{ flex:1, overflowY:'auto', overflowX:'hidden', padding:'20px 18px 18px' }}>
+        <SectionLabel>What is this about?</SectionLabel>
+        <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
+          {role.matters.map((m,i) => <MatterTile key={m.id} matter={m} delay={i*55} onClick={()=>onMatter(m)}/>)}
+        </div>
+      </div>
+      <div style={{ flexShrink:0, padding:'12px 16px 26px', borderTop:'1px solid var(--line)', background:'var(--bg-2)' }}>
+        <div style={{ fontSize:10.5, color:'var(--ink-3)', fontWeight:500, letterSpacing:'0.04em', textTransform:'uppercase', marginBottom:9, paddingLeft:4 }}>Something else? Describe it or tap the mic</div>
+        <div style={{ display:'flex', alignItems:'center', gap:9 }}>
+          <button onClick={()=>onFreeText('__voice__')} aria-label="Speak" className="hp-tile" style={{ width:42, height:42, borderRadius:999, flexShrink:0, background:'var(--card-2)', border:'1px solid var(--line-strong)', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="9" y="3" width="6" height="11" rx="3" stroke="var(--gold)" strokeWidth="1.8"/><path d="M5.5 11a6.5 6.5 0 0013 0M12 17.5V21" stroke="var(--gold)" strokeWidth="1.8" strokeLinecap="round"/></svg>
+          </button>
+          <div style={{ flex:1, display:'flex', alignItems:'center', background:'var(--card)', border:'1px solid var(--line-strong)', borderRadius:999, padding:'0 6px 0 16px' }}>
+            <input value={draft} onChange={e=>setDraft(e.target.value)} onKeyDown={e=>e.key==='Enter'&&submit()} placeholder="Describe your matter…" style={{ flex:1, background:'transparent', border:'none', outline:'none', color:'var(--ink)', fontFamily:'var(--sans)', fontSize:14, padding:'11px 0' }}/>
+            <button onClick={submit} aria-label="Send" disabled={!draft.trim()} style={{ width:34, height:34, borderRadius:999, flexShrink:0, border:'none', background:draft.trim()?'var(--gold)':'var(--card-2)', opacity:draft.trim()?1:0.5, display:'flex', alignItems:'center', justifyContent:'center', cursor:draft.trim()?'pointer':'default', transition:'background 150ms, opacity 150ms' }}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 12h15M12 5l7 7-7 7" stroke={draft.trim()?'#1a1407':'var(--ink-3)'} strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Screen D: Conversation + Chip Tray ──────────────────────────────────────
+
+const HP_CHIPS = {
+  billing:   ["It's a charge I don't recognise", "My total looks wrong", "I already paid this", "Show my latest invoice"],
+  orders:    ["Give me the live status", "It's later than promised", "Change the details", "It's the wrong items"],
+  product:   ["Check stock & lead time", "I need samples first", "Add my branding", "Send the full spec"],
+  corporate: ["Connect me to my manager", "I'm opening an account", "Discuss volume pricing", "It's about a tender"],
+  complaint: ["It arrived damaged", "There's a quality defect", "This wasn't resolved before", "I want it in writing"],
+  general:   ["Point me to the right team", "Just a quick question", "Opening hours & location", "Something else"],
+};
+const HP_CHIPS_MID = ["That's correct", "There's one more thing", "How long will it take?", "Just get it resolved"];
+const HP_CHIPS_CONFIRM = ["Yes, go ahead", "Email me confirmation", "Not yet — one more thing"];
+
+function scriptedTurn(ctx, history) {
+  const userTurns = history.filter(m=>m.role==='user').length;
+  const { company, dept, role, matter } = ctx;
+  const cat = matter.cat || (dept&&dept.cat) || 'general';
+  if (history.length===0) {
+    const who = role&&role.agent ? `${role.agent.first} here from ${dept.name}. ` : '';
+    return { reply:`${who}I can see you're reaching us about "${matter.title}". I've already got your account open — tell me a little more and I'll take it from here.`, chips:(HP_CHIPS[cat]||HP_CHIPS.general).slice(0,4), resolved:false };
+  }
+  if (userTurns===1) return { reply:`Got it — thanks. I can see exactly what you mean and I've flagged it on your account. Want me to action this for you now?`, chips:HP_CHIPS_MID, resolved:false };
+  if (userTurns===2) return { reply:`Perfect. I'll sort that straight away — no need to repeat anything, it's all logged against this matter. Shall I confirm and send you a summary?`, chips:HP_CHIPS_CONFIRM, resolved:false };
+  return { reply:`Done — that's been actioned and confirmed. You'll have a summary in your Ainager inbox. Anything else while I'm here?`, resolved:true, summary:[`Matter: ${matter.title}`, role?`Handled by ${role.title}${dept?', '+dept.name:''}`:`Handled by ${dept?dept.name:company.name}`, `Actioned and confirmed — no transfer, no hold`] };
+}
+
+function buildPrompt(ctx, history) {
+  const { company, dept, role, matter } = ctx;
+  const path = [dept&&dept.name, role&&role.title, matter.title].filter(Boolean).join(' › ');
+  const transcript = history.map(m=>`${m.role==='agent'?'AGENT':'CUSTOMER'}: ${m.text}`).join('\n');
+  return [
+    `You are a warm, efficient human-feeling support agent for ${company.name} (${company.domain}), a food-packaging manufacturer.`,
+    `You are reached through Ainager — the customer navigated visually to exactly this context, so you ALREADY KNOW why they're here. Never give a generic greeting or ask "how can I help".`,
+    `CONTEXT PATH: ${path}`,
+    role?`You are the "${role.title}" — ${role.scope}.`:``,
+    `MATTER: "${matter.title}"${matter.context?' — '+matter.context:''}.`,
+    ``,
+    history.length===0
+      ? `Write your OPENING line. Start exactly at the matter (reference it specifically), sound human and reassuring, offer to act. 1–2 sentences.`
+      : `Continue the conversation. Be concise (1–3 sentences), warm, proactive. Resolve the matter within a couple of turns — confirm actions, don't transfer, don't ask them to repeat themselves.`,
+    ``,
+    transcript?`CONVERSATION SO FAR:\n${transcript}\n`:``,
+    `Reply with STRICT JSON only, no markdown:`,
+    `{"reply": string, "chips": [3-4 SHORT first-person things the customer might tap next, each under 6 words], "resolved": boolean, "summary": [if resolved, 2-3 short bullets of what was done]}`,
+  ].filter(s=>s!==``).join('\n');
+}
+
+function extractJSON(text) {
+  if (!text) return null;
+  let t = String(text).trim().replace(/^```(?:json)?/i,'').replace(/```$/,'').trim();
+  const s=t.indexOf('{'), e=t.lastIndexOf('}');
+  if(s===-1||e===-1) return null;
+  try { return JSON.parse(t.slice(s,e+1)); } catch(_) { return null; }
+}
+
+async function liveTurn(ctx, history) {
+  if (!(window.claude&&typeof window.claude.complete==='function')) throw new Error('no-live');
+  const prompt = buildPrompt(ctx, history);
+  const raw = await Promise.race([
+    window.claude.complete({ messages:[{ role:'user', content:prompt }] }),
+    new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),9000)),
+  ]);
+  const data = extractJSON(raw);
+  if (!data||typeof data.reply!=='string') throw new Error('bad-json');
+  return { reply:data.reply.trim(), chips:Array.isArray(data.chips)?data.chips.slice(0,4).map(String):[], resolved:!!data.resolved, summary:Array.isArray(data.summary)?data.summary.map(String):null };
+}
+
+async function getTurn(ctx, history, mode) {
+  if (mode==='scripted') return scriptedTurn(ctx, history);
+  try {
+    const r = await liveTurn(ctx, history);
+    if (!r.chips||!r.chips.length) r.chips = scriptedTurn(ctx, history).chips||[];
+    return r;
+  } catch(_) { return scriptedTurn(ctx, history); }
+}
+
+function Bubble({ m }) {
+  const agent = m.role==='agent';
+  return (
+    <div className="hp-msg" style={{ display:'flex', justifyContent:agent?'flex-start':'flex-end', gap:9, alignItems:'flex-end' }}>
+      {agent && <Avatar initials={m.av||'HP'} size={28} bg="var(--card)"/>}
+      <div style={{ maxWidth:'78%', padding:'11px 14px', borderRadius:agent?'4px 17px 17px 17px':'17px 4px 17px 17px', background:agent?'var(--card)':'var(--navy)', border:agent?'1px solid var(--line)':'1px solid rgba(255,255,255,0.07)', color:'var(--ink)', fontSize:14, lineHeight:1.42, letterSpacing:'0.005em' }}>{m.text}</div>
+    </div>
+  );
+}
+
+function TypingBubble() {
+  return (
+    <div className="hp-msg" style={{ display:'flex', gap:9, alignItems:'flex-end' }}>
+      <Avatar initials="HP" size={28} bg="var(--card)"/>
+      <div style={{ padding:'13px 16px', borderRadius:'4px 17px 17px 17px', background:'var(--card)', border:'1px solid var(--line)', display:'flex', gap:5 }}>
+        {[0,1,2].map(i => <span key={i} style={{ width:6, height:6, borderRadius:999, background:'var(--ink-3)', animation:`hp-typing 1.3s ${i*0.16}s infinite ease-in-out` }}/>)}
+      </div>
+    </div>
+  );
+}
+
+function ChipBtn({ label, index, animClass, onPick }) {
+  const [firing, setFiring] = React.useState(false);
+  const fire = () => { if(firing) return; setFiring(true); setTimeout(()=>onPick(label), 230); };
+  return (
+    <button onClick={fire} className={'hp-chip '+animClass+(firing?' firing':'')} style={{ animationDelay:(firing?0:index*70)+'ms', cursor:'pointer', background:'var(--card-2)', color:'var(--ink)', border:'1px solid var(--gold-line)', borderRadius:999, padding:'9px 15px', fontFamily:'var(--sans)', fontSize:13, fontWeight:500, whiteSpace:'nowrap', maxWidth:'100%' }}>{label}</button>
+  );
+}
+
+function ChipTray({ chips, loading, treatment, trayKey, onPick }) {
+  const animClass = { spring:'chip-spring', glide:'chip-glide', pop:'chip-pop' }[treatment]||'chip-spring';
+  return (
+    <div style={{ padding:'0 14px 8px' }}>
+      {loading ? (
+        <div style={{ display:'flex', flexWrap:'wrap', gap:8 }}>
+          {[120,96,140].map((w,i) => <div key={i} className="hp-shimmer" style={{ height:36, width:w, borderRadius:999, border:'1px solid var(--line)' }}/>)}
+        </div>
+      ) : (
+        <div style={{ display:'flex', flexWrap:'wrap', gap:8 }}>
+          {chips.map((c,i) => <ChipBtn key={trayKey+'-'+i} label={c} index={i} animClass={animClass} onPick={onPick}/>)}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ListeningSheet({ onCancel }) {
+  return (
+    <div className="hp-scrim" style={{ position:'absolute', inset:0, zIndex:70, background:'rgba(5,5,5,0.78)', backdropFilter:'blur(6px)', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:26 }}>
+      <div style={{ display:'flex', alignItems:'flex-end', gap:5, height:56 }}>
+        {[0,1,2,3,4,5,6].map(i => <span key={i} style={{ width:6, borderRadius:6, background:'var(--gold)', height:14, animation:`hp-wave 0.9s ${i*0.09}s infinite ease-in-out` }}/>)}
+      </div>
+      <div style={{ fontFamily:'var(--serif)', fontStyle:'italic', fontSize:22, color:'var(--gold)' }}>Listening…</div>
+      <div style={{ fontSize:12.5, color:'var(--ink-2)' }}>Speak naturally — I'm following along</div>
+      <button onClick={onCancel} className="hp-tile" style={{ marginTop:6, padding:'10px 22px', borderRadius:999, background:'var(--card)', border:'1px solid var(--line-strong)', color:'var(--ink)', fontFamily:'var(--sans)', fontSize:13, cursor:'pointer' }}>Cancel</button>
+    </div>
+  );
+}
+
+function SheetBtn({ children, onClick, primary }) {
+  return <button onClick={onClick} className="hp-tile" style={{ padding:'12px 12px', borderRadius:13, cursor:'pointer', background:primary?'var(--gold)':'var(--card)', color:primary?'#1a1407':'var(--ink)', border:primary?'1px solid var(--gold)':'1px solid var(--line-strong)', fontFamily:'var(--sans)', fontSize:13, fontWeight:primary?600:500 }}>{children}</button>;
+}
+
+function SessionCard({ ctx, onSave, onRate, onCompany, onHome }) {
+  const ref = '#AIN-'+(2000+Math.floor(Math.random()*8000));
+  return (
+    <div style={{ position:'absolute', inset:0, zIndex:65, display:'flex', flexDirection:'column', justifyContent:'flex-end' }}>
+      <div className="hp-scrim" onClick={onHome} style={{ position:'absolute', inset:0, background:'rgba(5,5,5,0.6)' }}/>
+      <div className="hp-sheet" style={{ position:'relative', background:'var(--bg-2)', borderTop:'2px solid var(--gold)', borderRadius:'24px 24px 0 0', padding:'22px 20px 34px', boxShadow:'0 -20px 50px rgba(0,0,0,0.5)' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:11, marginBottom:16 }}>
+          <div style={{ width:34, height:34, borderRadius:999, background:'var(--gold-soft)', border:'1px solid var(--gold-line)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="var(--gold)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          </div>
+          <div style={{ fontFamily:'var(--serif)', fontStyle:'italic', fontWeight:700, fontSize:22, color:'var(--ink)' }}>Matter resolved</div>
+        </div>
+        <div style={{ display:'flex', flexDirection:'column', gap:9, marginBottom:16 }}>
+          {ctx.summary.map((s,i) => (
+            <div key={i} style={{ display:'flex', gap:9, alignItems:'flex-start' }}>
+              <span style={{ width:5, height:5, borderRadius:999, background:'var(--gold)', marginTop:7, flexShrink:0 }}/>
+              <span style={{ fontSize:13.5, color:'var(--ink-2)', lineHeight:1.4 }}>{s}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{ fontSize:12, color:'var(--ink-3)', letterSpacing:'0.04em', marginBottom:18 }}>
+          Reference: <span style={{ color:'var(--gold)', fontWeight:600 }}>{ref}</span>
+        </div>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:9 }}>
+          <SheetBtn onClick={onSave}>Save summary</SheetBtn>
+          <SheetBtn onClick={onRate}>Rate this call</SheetBtn>
+          <SheetBtn onClick={onCompany}>Back to {ctx.company.name}</SheetBtn>
+          <SheetBtn onClick={onHome} primary>Back to Home</SheetBtn>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ScreenD({ ctx, mode, treatment, showContext=true, onBack, onCompany, onHome }) {
+  const [messages, setMessages] = React.useState([]);
+  const [chips, setChips] = React.useState([]);
+  const [chipsLoading, setChipsLoading] = React.useState(false);
+  const [thinking, setThinking] = React.useState(false);
+  const [resolvedCtx, setResolvedCtx] = React.useState(null);
+  const [listening, setListening] = React.useState(false);
+  const [draft, setDraft] = React.useState('');
+  const [trayKey, setTrayKey] = React.useState(0);
+  const [toast, setToast] = React.useState('');
+  const scrollRef = React.useRef(null);
+  const histRef = React.useRef([]);
+
+  const path = [ctx.dept&&ctx.dept.name, ctx.role&&ctx.role.title, ctx.matter.title].filter(Boolean).join(' · ');
+  const av = (ctx.role&&ctx.role.agent) ? ctx.role.agent.initials : 'HP';
+
+  const pushAgent = text => { histRef.current=[...histRef.current,{role:'agent',text}]; setMessages(m=>[...m,{id:Date.now()+Math.random(),role:'agent',text,av}]); };
+  const pushUser = text => { histRef.current=[...histRef.current,{role:'user',text}]; setMessages(m=>[...m,{id:Date.now()+Math.random(),role:'user',text}]); };
+
+  const runAgent = React.useCallback(async () => {
+    setChips([]); setChipsLoading(false); setThinking(true);
+    const history = histRef.current.slice();
+    const minWait = new Promise(r=>setTimeout(r,650));
+    const [turn] = await Promise.all([getTurn(ctx, history, mode), minWait]);
+    setThinking(false);
+    pushAgent(turn.reply);
+    if (turn.resolved) {
+      setTimeout(()=>setResolvedCtx({ company:ctx.company, summary:turn.summary||scriptedTurn(ctx,histRef.current).summary||[] }), 850);
+      return;
+    }
+    setChipsLoading(true);
+    setTimeout(()=>{ setChipsLoading(false); setTrayKey(k=>k+1); setChips(turn.chips||[]); }, 600);
+  }, [ctx, mode]);
+
+  React.useEffect(()=>{ runAgent(); }, []);
+  React.useEffect(()=>{ const el=scrollRef.current; if(el) el.scrollTop=el.scrollHeight+999; }, [messages,thinking,chips,chipsLoading]);
+
+  const handlePick = text => { setChips([]); pushUser(text); runAgent(); };
+  const handleSend = () => { const t=draft.trim(); if(!t) return; setDraft(''); setChips([]); pushUser(t); runAgent(); };
+  const handleVoice = () => {
+    setListening(true);
+    setTimeout(()=>{ setListening(false); handlePick("Yes — that's exactly the matter, please go ahead."); }, 1900);
+  };
+  const flash = msg => { setToast(msg); setTimeout(()=>setToast(''),1600); };
+
+  return (
+    <div className="hp-screen" style={{ height:'100%', display:'flex', flexDirection:'column', background:'var(--bg)', position:'relative' }}>
+      <div style={{ flexShrink:0, background:'var(--bg-2)', borderBottom:'1px solid var(--line)', padding:'50px 14px 12px' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:11 }}>
+          <BackBtn onClick={onBack}/>
+          <Avatar initials={av} size={38}/>
+          <div style={{ flex:1, minWidth:0 }}>
+            <div style={{ display:'flex', alignItems:'baseline', gap:8 }}>
+              <span style={{ fontFamily:'var(--serif)', fontStyle:'italic', fontWeight:700, fontSize:19, color:'var(--ink)' }}>{ctx.company.name}</span>
+              <span style={{ display:'inline-flex', alignItems:'center', gap:5, fontSize:11, color:'var(--ink-2)' }}>
+                <StatusDot state="green" pulse size={6}/> Online · Grok
+              </span>
+            </div>
+            {showContext && <div style={{ fontSize:11, color:'var(--gold)', fontWeight:500, marginTop:3, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{path}</div>}
+          </div>
+          <span style={{ fontSize:9, fontWeight:700, letterSpacing:'0.18em', color:'var(--ink-3)', flexShrink:0 }}>AINAGER</span>
+        </div>
+      </div>
+
+      <div ref={scrollRef} className="hp-scroll" style={{ flex:1, overflowY:'auto', overflowX:'hidden', padding:'18px 14px 8px', display:'flex', flexDirection:'column', gap:12 }}>
+        {messages.map(m=><Bubble key={m.id} m={m}/>)}
+        {thinking && <TypingBubble/>}
+      </div>
+
+      {!resolvedCtx && (chips.length>0||chipsLoading) && (
+        <ChipTray chips={chips} loading={chipsLoading} treatment={treatment} trayKey={trayKey} onPick={handlePick}/>
+      )}
+
+      <div style={{ flexShrink:0, padding:'10px 14px 26px', borderTop:'1px solid var(--line)', background:'var(--bg-2)', display:'flex', alignItems:'center', gap:9 }}>
+        <button onClick={handleVoice} aria-label="Speak" className="hp-tile" style={{ width:42, height:42, borderRadius:999, flexShrink:0, background:'var(--card-2)', border:'1px solid var(--line-strong)', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="9" y="3" width="6" height="11" rx="3" stroke="var(--gold)" strokeWidth="1.8"/><path d="M5.5 11a6.5 6.5 0 0013 0M12 17.5V21" stroke="var(--gold)" strokeWidth="1.8" strokeLinecap="round"/></svg>
+        </button>
+        <div style={{ flex:1, display:'flex', alignItems:'center', background:'var(--card)', border:'1px solid var(--line-strong)', borderRadius:999, padding:'0 6px 0 16px' }}>
+          <input value={draft} onChange={e=>setDraft(e.target.value)} onKeyDown={e=>e.key==='Enter'&&handleSend()} placeholder="Type or speak…" style={{ flex:1, background:'transparent', border:'none', outline:'none', color:'var(--ink)', fontFamily:'var(--sans)', fontSize:14, padding:'11px 0' }}/>
+          <button onClick={handleSend} aria-label="Send" disabled={!draft.trim()} style={{ width:34, height:34, borderRadius:999, flexShrink:0, border:'none', background:draft.trim()?'var(--gold)':'var(--card-2)', opacity:draft.trim()?1:0.5, display:'flex', alignItems:'center', justifyContent:'center', cursor:draft.trim()?'pointer':'default', transition:'background 150ms, opacity 150ms' }}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 12h15M12 5l7 7-7 7" stroke={draft.trim()?'#1a1407':'var(--ink-3)'} strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      {listening && <ListeningSheet onCancel={()=>setListening(false)}/>}
+      {resolvedCtx && <SessionCard ctx={resolvedCtx} onSave={()=>flash('Summary saved to your inbox')} onRate={()=>flash('Thanks for rating this call')} onCompany={onCompany} onHome={onHome}/>}
+      {toast && <div style={{ position:'absolute', left:'50%', bottom:96, transform:'translateX(-50%)', zIndex:80, background:'var(--card)', border:'1px solid var(--gold-line)', color:'var(--ink)', padding:'10px 18px', borderRadius:999, fontSize:12.5, fontWeight:500, boxShadow:'0 10px 30px rgba(0,0,0,0.5)' }}>{toast}</div>}
+    </div>
+  );
+}
+
+// ─── Root App ─────────────────────────────────────────────────────────────────
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "chipMotion": "spring",
+  "engine": "auto",
+  "showContext": true
+}/*EDITMODE-END*/;
+
+function makeMatter(text, cat) {
+  return { id:'free-'+Math.random().toString(36).slice(2,7), title:text, context:'', cat, synthetic:true };
+}
+
+function ScaledDevice({ children }) {
+  const [scale, setScale] = React.useState(1);
+  React.useEffect(()=>{
+    const fit = () => {
+      const m=24, s=Math.min((window.innerWidth-m)/402,(window.innerHeight-m)/874,1.15);
+      setScale(s>0?s:1);
+    };
+    fit(); window.addEventListener('resize',fit); return ()=>window.removeEventListener('resize',fit);
+  },[]);
+  return (
+    <div style={{ width:402*scale, height:874*scale, position:'relative' }}>
+      <div style={{ position:'absolute', top:0, left:0, width:402, height:874, transform:`scale(${scale})`, transformOrigin:'top left' }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const company = window.HOTPACK;
+  const [stack, setStack] = React.useState([{ screen:'A' }]);
+  const [dir, setDir] = React.useState('fwd');
+  const cur = stack[stack.length-1];
+
+  const push = frame => { setDir('fwd'); setStack(s=>[...s,frame]); };
+  const back = () => { setDir('back'); setStack(s=>s.length>1?s.slice(0,-1):s); };
+  const reset = () => { setDir('back'); setStack([{ screen:'A' }]); };
+  const anim = dir==='back' ? 'back' : '';
+
+  const onDept = dept => push({ screen:'B', dept });
+  const onRole = role => push({ screen:'C', dept:cur.dept, role });
+  const onMatter = matter => push({ screen:'D', dept:cur.dept, role:cur.role, matter });
+  const onQuick = text => push({ screen:'D', dept:cur.dept, role:null, matter:makeMatter(text, cur.dept.cat) });
+  const onFreeText = text => {
+    const title = text==='__voice__' ? 'Something else I need help with' : text;
+    push({ screen:'D', dept:cur.dept, role:cur.role, matter:makeMatter(title, cur.dept.cat) });
+  };
+
+  let screen = null;
+  if (cur.screen==='A') screen = <ScreenA company={company} anim={anim} onBack={reset} onDept={onDept}/>;
+  else if (cur.screen==='B') screen = <ScreenB company={company} dept={cur.dept} anim={anim} onBack={back} onRole={onRole} onQuick={onQuick}/>;
+  else if (cur.screen==='C') screen = <ScreenC company={company} dept={cur.dept} role={cur.role} anim={anim} onBack={back} onMatter={onMatter} onFreeText={onFreeText}/>;
+  else if (cur.screen==='D') {
+    const ctx = { company, dept:cur.dept, role:cur.role, matter:cur.matter };
+    const key = (cur.dept?cur.dept.id:'x')+'-'+(cur.role?cur.role.id:'x')+'-'+cur.matter.id;
+    screen = <ScreenD key={key} ctx={ctx} mode={t.engine==='scripted'?'scripted':'auto'} treatment={t.chipMotion} showContext={t.showContext} onBack={back} onCompany={reset} onHome={reset}/>;
+  }
+
+  return (
+    <React.Fragment>
+      <ScaledDevice>
+        <IOSDevice dark width={402} height={874}>
+          {screen}
+        </IOSDevice>
+      </ScaledDevice>
+      <TweaksPanel>
+        <TweakSection label="Chip tray"/>
+        <TweakRadio label="Motion" value={t.chipMotion} options={['spring','glide','pop']} onChange={v=>setTweak('chipMotion',v)}/>
+        <TweakSection label="Conversation"/>
+        <TweakRadio label="Engine" value={t.engine} options={['auto','scripted']} onChange={v=>setTweak('engine',v)}/>
+        <div style={{ fontSize:11, color:'rgba(41,38,27,0.55)', padding:'2px 2px 8px', lineHeight:1.4 }}>"auto" uses the live model with a scripted fallback. "scripted" forces the deterministic demo flow.</div>
+        <TweakToggle label="Show context path" value={t.showContext} onChange={v=>setTweak('showContext',v)}/>
+      </TweaksPanel>
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('stage')).render(<App/>);
+  </script>
+</body>
+</html>
